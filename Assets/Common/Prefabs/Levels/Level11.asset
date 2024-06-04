@@ -14,4 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   LevelName: 
   Edges:
+  - Points:
+    - {x: 0, y: 0}
+    - {x: 0, y: 0}
+  - Points: []
   - Points: []

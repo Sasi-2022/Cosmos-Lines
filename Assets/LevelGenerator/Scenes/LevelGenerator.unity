@@ -683,7 +683,7 @@ MonoBehaviour:
   _nodePrefab: {fileID: 6012527295122756115, guid: fcd72154c34cc2848b962ca4b332baf5, type: 3}
   _simulateButton: {fileID: 554386616}
   _allLevelList: {fileID: 11400000, guid: 0c42c6ab4e819f74a8685ba2109401ed, type: 2}
-  currentLevelData: {fileID: 0}
+  currentLevelData: {fileID: 11400000, guid: 752b7fae5bf061e45ab62c401a7a39ef, type: 2}
   _counterText: {fileID: 454374650}
 --- !u!114 &1131468763
 MonoBehaviour:

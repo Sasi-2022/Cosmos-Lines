@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c6e6c6edbadb1864692ae533087a7773, type: 3}
-  m_Name: DefaultLevel
+  m_Name: Level1
   m_EditorClassIdentifier: 
-  LevelName: DefaultLevel
+  LevelName: Level1
   Edges:
   - Points:
     - {x: 1, y: 0}
