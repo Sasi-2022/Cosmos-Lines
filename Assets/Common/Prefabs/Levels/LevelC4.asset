@@ -13,4 +13,25 @@ MonoBehaviour:
   m_Name: LevelC4
   m_EditorClassIdentifier: 
   LevelName: 
-  Edges: []
+  Edges:
+  - Points:
+    - {x: 0, y: 6}
+    - {x: 3, y: 6}
+  - Points:
+    - {x: 6, y: 6}
+    - {x: 5, y: 4}
+  - Points:
+    - {x: 0, y: 5}
+    - {x: 3, y: 4}
+  - Points:
+    - {x: 5, y: 5}
+    - {x: 2, y: 4}
+  - Points:
+    - {x: 1, y: 3}
+    - {x: 3, y: 3}
+  - Points:
+    - {x: 1, y: 1}
+    - {x: 5, y: 3}
+  - Points:
+    - {x: 2, y: 1}
+    - {x: 5, y: 2}
