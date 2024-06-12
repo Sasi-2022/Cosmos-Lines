@@ -2945,7 +2945,7 @@ MonoBehaviour:
   CurrentStage: 0
   CurrentLevel: 0
   StageName: 
-  DefaultLevel: {fileID: 11400000, guid: 0110a216b147d4ca798461773261b051, type: 2}
+  DefaultLevel: {fileID: 11400000, guid: 2435dfa7c7a0e4fd4b1d9cf022fb9f3e, type: 2}
   _allLevels: {fileID: 11400000, guid: 0c42c6ab4e819f74a8685ba2109401ed, type: 2}
 --- !u!1 &1754124638
 GameObject:
