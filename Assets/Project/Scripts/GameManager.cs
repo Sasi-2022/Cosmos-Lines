@@ -32,10 +32,10 @@ namespace Connect.Core
 
             Levels = new Dictionary<string, LevelData>();
 
-            foreach (var item in _allLevels.Levels)
+           /* foreach (var item in _allLevels.Levels)
             {
                 Levels[item.LevelName] = item;
-            }
+            }*/
         }
 
 

@@ -6,6 +6,13 @@ namespace Connect.Common
     [CreateAssetMenu(fileName = "Levels",menuName = "SO/AllLevels")]
     public class LevelList : ScriptableObject
     {
-        public List<LevelData> Levels;
+        public List<Levels> Levellist;
+    }
+
+   [System.Serializable]
+    public class Levels
+    {
+        public string levelname;
+        public List<LevelData> Level;
     }
 }

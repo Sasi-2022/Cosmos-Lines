@@ -82,10 +82,10 @@ namespace Connect.Generator
         {
             Levels = new Dictionary<string, LevelData>();
 
-            foreach (var item in _allLevelList.Levels)
+          /*  foreach (var item in _allLevelList.Levels)
             {
                 Levels[item.LevelName] = item;
-            }
+            }*/
 
             if (canGeneratorOnce)
             {
@@ -123,7 +123,7 @@ namespace Connect.Generator
                 AssetDatabase.SaveAssets();
 #endif
                 Levels[currentLevelName] = currentLevelData;
-                _allLevelList.Levels.Add(currentLevelData);
+               // _allLevelList.Levels.Add(currentLevelData);
             }
 
             currentLevelData = Levels[currentLevelName];
@@ -168,7 +168,7 @@ namespace Connect.Generator
                 AssetDatabase.SaveAssets();
 #endif
                 Levels[currentLevelName] = currentLevelData;
-                _allLevelList.Levels.Add(currentLevelData);
+               // _allLevelList.Levels.Add(currentLevelData);
             }
 
             currentLevelData = Levels[currentLevelName];
