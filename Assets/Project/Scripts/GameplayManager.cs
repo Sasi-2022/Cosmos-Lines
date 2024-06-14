@@ -2,6 +2,7 @@ using Connect.Common;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Connect.Core
 {
@@ -17,6 +18,7 @@ namespace Connect.Core
         [SerializeField] private TMP_Text _titleText;
         [SerializeField] private GameObject _winText;
         [SerializeField] private SpriteRenderer _clickHighlight;
+        [SerializeField] private Image _titleimage;
 
         private void Awake()
         {
@@ -25,9 +27,11 @@ namespace Connect.Core
             hasGameFinished = false;
             _winText.SetActive(false);
             _titleText.gameObject.SetActive(true);
-            _titleText.text = GameManager.Instance.StageName + 
+            _titleText.text = 
                 " - " + GameManager.Instance.CurrentLevel.ToString();
+            _titleimage.sprite = GameManager.Instance.StageName;
 
+            //  CurrentLevelData = GameManager.Instance.GetLevel();
             CurrentLevelData = GameManager.Instance.GetLevel();
 
             SpawnBoard();
@@ -50,7 +54,7 @@ namespace Connect.Core
                 new Vector3(currentLevelSize / 2f,currentLevelSize /2f,0f),
                 Quaternion.identity);
 
-            board.size =  new Vector2(currentLevelSize + 0.08f, currentLevelSize + 0.08f);
+            board.size =  new Vector2(currentLevelSize + 1.5f, currentLevelSize + 1.5f);
 
             for (int i = 0; i < currentLevelSize; i++)
             {
