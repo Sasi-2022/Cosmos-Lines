@@ -52,14 +52,15 @@ namespace Connect.Core
         [SerializeField]
         private Image _levelTitleImage;
 
+        public Image titlename;
         
 
-        public void ClickedStage(string stageName, Color stageColor)
+        public void ClickedStage(Sprite stageName, Color stageColor)
         {
             _stagePanel.SetActive(false);
             _levelPanel.SetActive(true);
             CurrentColor = Color.white;
-            _levelTitleText.text = stageName;
+            titlename.sprite = stageName;
             _levelTitleImage.color = CurrentColor;
             LevelOpened?.Invoke();
         }
