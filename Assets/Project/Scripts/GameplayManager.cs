@@ -19,6 +19,7 @@ namespace Connect.Core
         [SerializeField] private GameObject _winText;
         [SerializeField] private SpriteRenderer _clickHighlight;
         [SerializeField] private Image _titleimage;
+        [SerializeField] private Button next;
 
         private void Awake()
         {
@@ -221,6 +222,7 @@ namespace Connect.Core
                 startNode = null;
                 _clickHighlight.gameObject.SetActive(false);
             }
+            
 
         }
 
@@ -273,6 +275,12 @@ namespace Connect.Core
             if (!hasGameFinished) return;
             
             GameManager.Instance.GoToGameplay();
+            
+        }
+
+        public void nextButton()
+        {
+            next.GetComponent<Button>().interactable = false;
         }
 
         #endregion

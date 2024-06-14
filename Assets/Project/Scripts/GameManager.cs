@@ -81,8 +81,9 @@ namespace Connect.Core
             {
                 CurrentLevel = 1;
                 CurrentStage++;
+                GameplayManager.Instance.nextButton();
 
-                if(CurrentStage == 8)
+                if (CurrentStage == 8)
                 {
                     CurrentStage = 1;
                     GoToMainMenu();

@@ -309,6 +309,7 @@ MonoBehaviour:
   _winText: {fileID: 1403350403}
   _clickHighlight: {fileID: 1238708598}
   _titleimage: {fileID: 1323390861}
+  next: {fileID: 1808435459}
   _boardPrefab: {fileID: 2336236266812617353, guid: d041698b8801a2140850c713f53f4d7e, type: 3}
   _bgCellPrefab: {fileID: 4868279087156050791, guid: 32f4244f904678a4bbc7172fd6d65ace, type: 3}
   _nodePrefab: {fileID: 2703563055490346233, guid: 172299688f6a7d84fa739942f3d053a1, type: 3}
@@ -375,7 +376,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 227.1, y: -233.9}
+  m_AnchoredPosition: {x: 227.1, y: -233.90002}
   m_SizeDelta: {x: 177, y: 177}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1132921857
