@@ -54,7 +54,7 @@ namespace Connect.Core
                 new Vector3(currentLevelSize / 2f,currentLevelSize /2f,0f),
                 Quaternion.identity);
 
-            board.size =  new Vector2(currentLevelSize + 1.5f, currentLevelSize + 1.5f);
+            board.size =  new Vector2(currentLevelSize + 0.1f, currentLevelSize + 0.1f);
 
             for (int i = 0; i < currentLevelSize; i++)
             {
