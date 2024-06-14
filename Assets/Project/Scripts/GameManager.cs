@@ -50,7 +50,7 @@ namespace Connect.Core
         public int CurrentLevel;
 
         
-        public string StageName;
+        public Sprite StageName;
 
         public LevelData[] level;
 
