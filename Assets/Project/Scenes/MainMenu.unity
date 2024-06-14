@@ -160,8 +160,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -640}
-  m_SizeDelta: {x: 512, y: 330.5}
+  m_AnchoredPosition: {x: 0, y: -737.1}
+  m_SizeDelta: {x: 616.4, y: 321.5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &281835352
 MonoBehaviour:
@@ -499,6 +499,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7325138008190197927, guid: c35eb340da0c7764eb9e08c134002a02, type: 3}
+      propertyPath: stagename
+      value: 
+      objectReference: {fileID: 21300000, guid: deba73171ce5441cc9a58211d6d06fe0, type: 3}
+    - target: {fileID: 7325138008190197927, guid: c35eb340da0c7764eb9e08c134002a02, type: 3}
       propertyPath: _stageName
       value: EXTREME
       objectReference: {fileID: 0}
@@ -653,6 +657,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7325138008190197927, guid: c35eb340da0c7764eb9e08c134002a02, type: 3}
+      propertyPath: stagename
+      value: 
+      objectReference: {fileID: 21300000, guid: cfcfa1708392449bc8007f184fc93849, type: 3}
+    - target: {fileID: 7325138008190197927, guid: c35eb340da0c7764eb9e08c134002a02, type: 3}
       propertyPath: _stageName
       value: MASTER
       objectReference: {fileID: 0}
@@ -806,6 +814,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7325138008190197927, guid: c35eb340da0c7764eb9e08c134002a02, type: 3}
+      propertyPath: stagename
+      value: 
+      objectReference: {fileID: 21300000, guid: 2ee4d732d798545919c0466946532274, type: 3}
     - target: {fileID: 7325138008190197927, guid: c35eb340da0c7764eb9e08c134002a02, type: 3}
       propertyPath: _stageName
       value: HARD
@@ -1003,7 +1015,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 587.2, y: 159.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &814862845
 GameObject:
@@ -1041,7 +1053,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 120, y: 120}
+  m_SizeDelta: {x: 122.8, y: 124.5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &814862847
 MonoBehaviour:
@@ -1196,6 +1208,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7325138008190197927, guid: c35eb340da0c7764eb9e08c134002a02, type: 3}
+      propertyPath: stagename
+      value: 
+      objectReference: {fileID: 21300000, guid: 54cb462e7b07f4905a44f3bed62ebe39, type: 3}
     - target: {fileID: 7325138008190197927, guid: c35eb340da0c7764eb9e08c134002a02, type: 3}
       propertyPath: _stageName
       value: INSANE
@@ -2323,7 +2339,7 @@ PrefabInstance:
     - target: {fileID: 7325138008190197927, guid: c35eb340da0c7764eb9e08c134002a02, type: 3}
       propertyPath: stagename
       value: 
-      objectReference: {fileID: 21300000, guid: dcf80ed2d0efa43ce89200b5914ecf18, type: 3}
+      objectReference: {fileID: 21300000, guid: e8ef2ff810cdf4c6b8f2efab28515cd9, type: 3}
     - target: {fileID: 7325138008190197927, guid: c35eb340da0c7764eb9e08c134002a02, type: 3}
       propertyPath: _stageName
       value: BEGINNER
@@ -2507,6 +2523,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7325138008190197927, guid: c35eb340da0c7764eb9e08c134002a02, type: 3}
+      propertyPath: stagename
+      value: 
+      objectReference: {fileID: 21300000, guid: 73ac60506c00144539cfb6bffc24363d, type: 3}
+    - target: {fileID: 7325138008190197927, guid: c35eb340da0c7764eb9e08c134002a02, type: 3}
       propertyPath: _stageName
       value: EXPERT
       objectReference: {fileID: 0}
@@ -2659,7 +2679,7 @@ PrefabInstance:
     - target: {fileID: 7325138008190197927, guid: c35eb340da0c7764eb9e08c134002a02, type: 3}
       propertyPath: stagename
       value: 
-      objectReference: {fileID: 21300000, guid: 16e8f6d6b38634a00b4f040fbba63e82, type: 3}
+      objectReference: {fileID: 21300000, guid: 213eb85a58a914da9aa91c295ae273c5, type: 3}
     - target: {fileID: 7325138008190197927, guid: c35eb340da0c7764eb9e08c134002a02, type: 3}
       propertyPath: _stageName
       value: INTERMEDIATE
@@ -2861,7 +2881,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
   m_AnchoredPosition: {x: 0, y: 656.8}
-  m_SizeDelta: {x: 938, y: 196}
+  m_SizeDelta: {x: 1118.4, y: 235.9}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1632269160
 MonoBehaviour:
