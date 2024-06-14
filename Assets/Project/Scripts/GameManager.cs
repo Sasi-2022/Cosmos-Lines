@@ -77,7 +77,7 @@ namespace Connect.Core
         {
             CurrentLevel++;
 
-            if(CurrentLevel == 51)
+            if(CurrentLevel == 6)
             {
                 CurrentLevel = 1;
                 CurrentStage++;
