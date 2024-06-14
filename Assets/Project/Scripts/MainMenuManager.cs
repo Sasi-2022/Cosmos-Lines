@@ -13,6 +13,8 @@ namespace Connect.Core
         [SerializeField] private GameObject _stagePanel;
         [SerializeField] private GameObject _levelPanel;
 
+        public Sprite currentsprite;
+
         private void Awake()
         {
             Instance = this;
@@ -50,11 +52,13 @@ namespace Connect.Core
         [SerializeField]
         private Image _levelTitleImage;
 
+        
+
         public void ClickedStage(string stageName, Color stageColor)
         {
             _stagePanel.SetActive(false);
             _levelPanel.SetActive(true);
-            CurrentColor = stageColor;
+            CurrentColor = Color.white;
             _levelTitleText.text = stageName;
             _levelTitleImage.color = CurrentColor;
             LevelOpened?.Invoke();

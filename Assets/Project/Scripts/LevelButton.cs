@@ -1,6 +1,8 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Connect.Common;
+using System.Collections.Generic;
 
 namespace Connect.Core
 {
@@ -9,10 +11,12 @@ namespace Connect.Core
         [SerializeField] private Button _button;
         [SerializeField] private Image _image;
         [SerializeField] TMP_Text _levelText;
-        [SerializeField] private Color _inactiveColor;
+        [SerializeField] private Sprite _inactiveColor;
 
         private bool isLevelUnlocked;
         private int currentLevel;
+
+        
 
         private void Awake()
         {
@@ -37,7 +41,7 @@ namespace Connect.Core
             currentLevel = int.Parse(_levelText.text);
             isLevelUnlocked = GameManager.Instance.IsLevelUnlocked(currentLevel);
 
-            _image.color = isLevelUnlocked ? MainMenuManager.Instance.CurrentColor : _inactiveColor;
+            _image.sprite = isLevelUnlocked ? MainMenuManager.Instance.currentsprite : _inactiveColor;
         }
 
         private void Clicked()
