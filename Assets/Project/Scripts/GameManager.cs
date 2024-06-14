@@ -82,6 +82,7 @@ namespace Connect.Core
                 CurrentLevel = 1;
                 CurrentStage++;
                 GameplayManager.Instance.nextButton();
+                GameplayManager.Instance.RefreshButton();
 
                 if (CurrentStage == 8)
                 {

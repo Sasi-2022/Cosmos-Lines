@@ -386,6 +386,7 @@ MonoBehaviour:
   _clickHighlight: {fileID: 1238708598}
   _titleimage: {fileID: 1323390861}
   next: {fileID: 1808435459}
+  refreshbtn: {fileID: 1979792081}
   _boardPrefab: {fileID: 2336236266812617353, guid: d041698b8801a2140850c713f53f4d7e, type: 3}
   _bgCellPrefab: {fileID: 4868279087156050791, guid: 32f4244f904678a4bbc7172fd6d65ace, type: 3}
   _nodePrefab: {fileID: 2703563055490346233, guid: 172299688f6a7d84fa739942f3d053a1, type: 3}

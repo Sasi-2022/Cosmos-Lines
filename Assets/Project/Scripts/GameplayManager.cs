@@ -20,6 +20,7 @@ namespace Connect.Core
         [SerializeField] private SpriteRenderer _clickHighlight;
         [SerializeField] private Image _titleimage;
         [SerializeField] private Button next;
+        [SerializeField] private Button refreshbtn;
 
         private void Awake()
         {
@@ -281,6 +282,11 @@ namespace Connect.Core
         public void nextButton()
         {
             next.GetComponent<Button>().interactable = false;
+        }
+
+        public void RefreshButton()
+        {
+            refreshbtn.GetComponent<Button>().interactable = false;
         }
 
         #endregion
