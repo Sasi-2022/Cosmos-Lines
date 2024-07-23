@@ -58,7 +58,7 @@ namespace Connect.Core
         public void ClickedStage(Sprite stageName, Color stageColor)
         {
             _stagePanel.SetActive(false);
-            _levelPanel.SetActive(true);
+           // _levelPanel.SetActive(true);
             CurrentColor = Color.white;
             titlename.sprite = stageName;
             _levelTitleImage.color = CurrentColor;
