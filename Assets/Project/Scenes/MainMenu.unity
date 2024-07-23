@@ -3198,7 +3198,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 2660997b00f424a2a8a167652dbecdb3, type: 2}
   - {fileID: 11400000, guid: e40308b8aa38b42ae94abe73da7b106d, type: 2}
   - {fileID: 11400000, guid: adb290d8d2f8c4677997bb3940513ffa, type: 2}
-  - {fileID: 11400000, guid: d00a4f8109fdf48669fcecf44fb9a0f5, type: 2}
+  - {fileID: 11400000, guid: 69763a72848064d918a9b86db4ee4235, type: 2}
   - {fileID: 11400000, guid: 048b5d399c8634daeba3ff9f21e373db, type: 2}
   - {fileID: 11400000, guid: e586456137a184f3ca5f45247fc19b1f, type: 2}
   - {fileID: 11400000, guid: 2a1eef626bf0a41aead7a824d2c1e090, type: 2}
@@ -3411,7 +3411,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: e239186b09dc54f168531e87804b5180, type: 2}
   - {fileID: 11400000, guid: 103c956db01c94633bbc29cef677e34d, type: 2}
   - {fileID: 11400000, guid: 7f4afede30a0b4df18c34eea4f19ed6a, type: 2}
-  DefaultLevel: {fileID: 0}
+  DefaultLevel: {fileID: 11400000, guid: 69763a72848064d918a9b86db4ee4235, type: 2}
   _allLevels: {fileID: 11400000, guid: 0c42c6ab4e819f74a8685ba2109401ed, type: 2}
 --- !u!1 &1754124638
 GameObject:
