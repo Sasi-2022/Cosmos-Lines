@@ -10,6 +10,9 @@ namespace Connect.Core
 
         public static GameManager Instance;
 
+        private bool isLevelUnlocked;
+        private int currentLevel;
+
         private void Awake()
         {
             if (Instance == null)
@@ -25,17 +28,26 @@ namespace Connect.Core
             }
         }
 
+        private void Start()
+        {
+            if (!isLevelUnlocked)
+                return;
+
+            GameManager.Instance.CurrentLevel = currentLevel;
+            GameManager.Instance.GoToGameplay();
+        }
+
         private void Init()
         {
             CurrentStage = 1;
-            CurrentLevel= 1;
+            CurrentLevel = 1;
 
             Levels = new Dictionary<string, LevelData>();
 
-           /* foreach (var item in _allLevels.Levels)
-            {
-                Levels[item.LevelName] = item;
-            }*/
+            /* foreach (var item in _allLevels.Levels)
+             {
+                 Levels[item.LevelName] = item;
+             }*/
         }
 
 
@@ -43,13 +55,13 @@ namespace Connect.Core
 
         #region GAME_VARIABLES
 
-        
+
         public int CurrentStage;
 
-        
+
         public int CurrentLevel;
 
-        
+
         public Sprite StageName;
 
         public LevelData[] level;
@@ -58,13 +70,13 @@ namespace Connect.Core
         {
             string levelName = "Level" + CurrentStage.ToString() + level.ToString();
 
-            if(level == 1)
+            if (level == 1)
             {
                 PlayerPrefs.SetInt(levelName, 1);
                 return true;
             }
 
-            if(PlayerPrefs.HasKey(levelName)) 
+            if (PlayerPrefs.HasKey(levelName))
             {
                 return PlayerPrefs.GetInt(levelName) == 1;
             }
@@ -77,7 +89,7 @@ namespace Connect.Core
         {
             CurrentLevel++;
 
-            if(CurrentLevel == 50)
+            if (CurrentLevel == 50)
             {
                 CurrentLevel = 1;
                 CurrentStage++;
@@ -109,11 +121,11 @@ namespace Connect.Core
 
         public LevelData GetLevel()
         {
-            
-            
+
+
             string levelName = "Level" + CurrentStage.ToString() + CurrentLevel.ToString();
 
-            if (CurrentLevel == 1&&CurrentStage==1)
+            if (CurrentLevel == 1 && CurrentStage == 1)
             {
                 DefaultLevel = level[0];
             }
@@ -1494,7 +1506,7 @@ namespace Connect.Core
 
         public void Loadlevel()
         {
-            
+
         }
 
         #endregion
@@ -1515,5 +1527,5 @@ namespace Connect.Core
         }
 
         #endregion
-    } 
+    }
 }
