@@ -20,5 +20,6 @@ public class UserSessionManager : MonoBehaviour
         {
             Destroy(gameObject); // Prevent duplicates
         }
+        Debug.Log("Awake called");
     }
 }
