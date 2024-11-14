@@ -1,17 +1,16 @@
 using Connect.Common;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 namespace Connect.Core
 {
     public class GameManager : MonoBehaviour
     {
-        #region START_METHODS
 
         public static GameManager Instance;
-
-        private bool isLevelUnlocked;
-        private int currentLevel;
+        public Button BackBtn;
 
         private void Awake()
         {
@@ -28,15 +27,6 @@ namespace Connect.Core
             }
         }
 
-        private void Start()
-        {
-            if (!isLevelUnlocked)
-                return;
-
-            GameManager.Instance.CurrentLevel = currentLevel;
-            GameManager.Instance.GoToGameplay();
-        }
-
         private void Init()
         {
             CurrentStage = 1;
@@ -44,44 +34,42 @@ namespace Connect.Core
 
             Levels = new Dictionary<string, LevelData>();
 
+            // Uncomment this block if _allLevels.Levels contains the level data you want to load
             /* foreach (var item in _allLevels.Levels)
-             {
-                 Levels[item.LevelName] = item;
-             }*/
+            {
+                Levels[item.LevelName] = item;
+            }*/
         }
 
 
-        #endregion
-
-        #region GAME_VARIABLES
-
 
         public int CurrentStage;
-
-
         public int CurrentLevel;
+        public Sprite StageName; // StageName here, but not linked to LevelData
+        public LevelData[] level; // Level array
 
-
-        public Sprite StageName;
-
-        public LevelData[] level;
+        private const string LoginTypeKey = "LoginType";
+        private const string FacebookLogin = "Facebook";
+        private const string GoogleLogin = "Google";
+        private const string GuestLogin = "Guest";
+        private string currentLoginKey;
 
         public bool IsLevelUnlocked(int level)
         {
-            string levelName = "Level" + CurrentStage.ToString() + level.ToString();
+            string levelKey = $"{currentLoginKey}_Level{CurrentStage}_{level}";
 
             if (level == 1)
             {
-                PlayerPrefs.SetInt(levelName, 1);
+                PlayerPrefs.SetInt(levelKey, 1); // Always unlock level 1
                 return true;
             }
 
-            if (PlayerPrefs.HasKey(levelName))
+            if (PlayerPrefs.HasKey(levelKey))
             {
-                return PlayerPrefs.GetInt(levelName) == 1;
+                return PlayerPrefs.GetInt(levelKey) == 1;
             }
 
-            PlayerPrefs.SetInt(levelName, 0);
+            PlayerPrefs.SetInt(levelKey, 0); // Set locked state by default
             return false;
         }
 
@@ -103,13 +91,49 @@ namespace Connect.Core
                 }
             }
 
-            string levelName = "Level" + CurrentStage.ToString() + CurrentLevel.ToString();
-            PlayerPrefs.SetInt(levelName, 1);
+            string levelKey = $"{currentLoginKey}_Level{CurrentStage}_{CurrentLevel}";
+            PlayerPrefs.SetInt(levelKey, 1); // Unlock this level
+            SaveProgress();
         }
 
-        #endregion
 
-        #region LEVEL_DATA
+
+        public void SetLoginType(string loginType)
+        {
+            PlayerPrefs.SetString(LoginTypeKey, loginType);
+            currentLoginKey = loginType;
+            LoadProgress();
+        }
+
+        private void LoadLoginType()
+        {
+            if (PlayerPrefs.HasKey(LoginTypeKey))
+            {
+                currentLoginKey = PlayerPrefs.GetString(LoginTypeKey);
+            }
+            else
+            {
+                currentLoginKey = GuestLogin; // Default to Guest if no login found
+                SetLoginType(GuestLogin);
+            }
+        }
+
+
+
+        public void SaveProgress()
+        {
+            PlayerPrefs.SetInt($"{currentLoginKey}_CurrentStage", CurrentStage);
+            PlayerPrefs.SetInt($"{currentLoginKey}_CurrentLevel", CurrentLevel);
+            PlayerPrefs.Save();
+        }
+
+        public void LoadProgress()
+        {
+            CurrentStage = PlayerPrefs.GetInt($"{currentLoginKey}_CurrentStage", 1);
+            CurrentLevel = PlayerPrefs.GetInt($"{currentLoginKey}_CurrentLevel", 1);
+        }
+
+
 
         [SerializeField]
         private LevelData DefaultLevel;
@@ -119,11 +143,13 @@ namespace Connect.Core
 
         private Dictionary<string, LevelData> Levels;
 
+
+
+
         public LevelData GetLevel()
         {
 
-
-            string levelName = "Level" + CurrentStage.ToString() + CurrentLevel.ToString();
+            string levelKey = "Level" + CurrentStage.ToString() + CurrentLevel.ToString();
 
             if (CurrentLevel == 1 && CurrentStage == 1)
             {
@@ -1495,12 +1521,10 @@ namespace Connect.Core
                 DefaultLevel = level[329];
             }
 
-
-            if (Levels.ContainsKey(levelName))
+            if (Levels.TryGetValue(levelKey, out var levelData))
             {
-                return Levels[levelName];
+                return levelData;
             }
-
             return DefaultLevel;
         }
 
@@ -1509,23 +1533,24 @@ namespace Connect.Core
 
         }
 
-        #endregion
 
-        #region SCENE_LOAD
 
         private const string MainMenu = "MainMenu";
         private const string Gameplay = "Gameplay";
 
         public void GoToMainMenu()
         {
-            UnityEngine.SceneManagement.SceneManager.LoadScene(MainMenu);
+            SceneManager.LoadScene(MainMenu);
         }
 
         public void GoToGameplay()
         {
-            UnityEngine.SceneManagement.SceneManager.LoadScene(Gameplay);
+            SceneManager.LoadScene(Gameplay);
         }
 
-        #endregion
+        public void OnClickBackBtn()
+        {
+            SceneManager.LoadScene("LoginScene");
+        }
     }
 }

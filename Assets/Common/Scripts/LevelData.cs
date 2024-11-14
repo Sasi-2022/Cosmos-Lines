@@ -8,6 +8,8 @@ namespace Connect.Common
     {
         public string LevelName;
         public List<Edge> Edges;
+
+        public Sprite StageName { get; set; }
     }
 
     [System.Serializable]

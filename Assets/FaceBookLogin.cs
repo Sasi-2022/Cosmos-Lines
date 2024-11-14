@@ -7,6 +7,7 @@ using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
 using TMPro;
 using System.IO;
+using Connect.Core;
 
 public class FaceBookLogin : MonoBehaviour
 {
@@ -78,8 +79,9 @@ public class FaceBookLogin : MonoBehaviour
             LoginPanel1.SetActive(true);
             LoginPanel.SetActive(false);
 
+            // DO NOT delete local data after logout
+            // Simply reset the UI and user data
             ResetUserData();
-            DeleteLocalData(); // Remove local data on logout
         }
         else
         {
@@ -89,6 +91,7 @@ public class FaceBookLogin : MonoBehaviour
 
     private void ResetUserData()
     {
+        // This will reset the UI but will not clear saved user data
         FB_userName.text = "New User";
         FB_userId.text = "ID";
         FB_userDp.sprite = null;
@@ -128,7 +131,7 @@ public class FaceBookLogin : MonoBehaviour
             FB_userName.text = firstName;
             FB_userId.text = userId;
 
-            // Save data locally
+            // Save data locally (without clearing on logout)
             SaveLocalData(userId, firstName);
 
             FB.API("/me/picture?redirect=false&type=large", HttpMethod.GET, ProfilePictureCallback);
@@ -179,9 +182,16 @@ public class FaceBookLogin : MonoBehaviour
             pictureURL = pictureURL
         };
 
+        // Save data to a JSON file locally
         string jsonData = JsonUtility.ToJson(userData);
         File.WriteAllText(localDataPath, jsonData);
         Debug.Log("Data saved locally.");
+
+        // Optionally, save in PlayerPrefs for quick access
+        PlayerPrefs.SetString("FB_USER_ID", userId);
+        PlayerPrefs.SetString("FB_USER_NAME", userName);
+        PlayerPrefs.SetString("FB_USER_PICTURE", pictureURL);
+        PlayerPrefs.Save();
     }
 
     private void LoadLocalData()
@@ -207,17 +217,24 @@ public class FaceBookLogin : MonoBehaviour
         }
     }
 
-    private void DeleteLocalData()
-    {
-        if (File.Exists(localDataPath))
-        {
-            File.Delete(localDataPath);
-            Debug.Log("Local data deleted.");
-        }
-    }
-
     public void NextBTN()
     {
         SceneManager.LoadScene("MainMenu");
+        // After successful login, ensure GameManager is initialized before calling its methods
+        StartCoroutine(InitializeGameManager("Facebook"));
+    }
+
+    // Coroutine to ensure GameManager is initialized before calling its methods
+    private IEnumerator InitializeGameManager(string loginType)
+    {
+        // Wait until GameManager.Instance is not null
+        while (GameManager.Instance == null)
+        {
+            yield return null;
+        }
+
+        // Once GameManager.Instance is ready, set the login type and load progress
+        GameManager.Instance.SetLoginType(loginType);
+        GameManager.Instance.LoadProgress();
     }
 }

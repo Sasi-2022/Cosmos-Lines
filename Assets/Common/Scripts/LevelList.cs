@@ -7,6 +7,9 @@ namespace Connect.Common
     public class LevelList : ScriptableObject
     {
         public List<Levels> Levellist;
+        public IEnumerable<object> Level;
+
+        public IEnumerable<object> level { get; set; }
     }
 
    [System.Serializable]
