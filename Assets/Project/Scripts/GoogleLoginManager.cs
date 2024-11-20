@@ -20,7 +20,7 @@ public class GoogleLoginManager : MonoBehaviour
 
     // public GameObject loginPanel, profilePanel;
     private GoogleSignInConfiguration configuration;
-    public string webClientId = "1051490529515-k6q6bgda78o0q34au9an9crb5bum7kc8.apps.googleusercontent.com";
+    private string webClientId = "1051490529515-k6q6bgda78o0q34au9an9crb5bum7kc8.apps.googleusercontent.com";
     public static GoogleLoginManager instance;
 
 
@@ -37,17 +37,19 @@ public class GoogleLoginManager : MonoBehaviour
             Destroy(gameObject);
         }
 
-    }
-
-    private void OnEnable()
-    {
         configuration = new GoogleSignInConfiguration
         {
             WebClientId = webClientId,
             RequestIdToken = true,
-            UseGameSignIn = false,
-            RequestEmail = true
+            RequestEmail = true,
+            RequestAuthCode = true
         };
+
+    }
+
+    private void OnEnable()
+    {
+        
 
     }
 
@@ -60,14 +62,9 @@ public class GoogleLoginManager : MonoBehaviour
     public void OnSignIn()
     {
         GoogleSignIn.Configuration = configuration;
-        GoogleSignIn.Configuration.UseGameSignIn = false;
-        GoogleSignIn.Configuration.RequestIdToken = true;
-        GoogleSignIn.Configuration.RequestEmail = true;
         Debug.LogError("Calling SignIn");
-
-        GoogleSignIn.Configuration = configuration;
-        GoogleSignIn.DefaultInstance.SignIn().ContinueWith(
-            OnAuthenticationFinished, TaskScheduler.Default);
+     
+        GoogleSignIn.DefaultInstance.SignIn().ContinueWith(OnAuthenticationFinished);
 
     }
 
@@ -98,17 +95,25 @@ public class GoogleLoginManager : MonoBehaviour
         {
             userNameStr = "" + task.Result.DisplayName;
             Debug.LogError("Welcome: " + task.Result.DisplayName + "!");
-            imageURL = task.Result.ImageUrl?.ToString();
-            StartCoroutine(LoadProfilePic(task.Result.ImageUrl.ToString()));
+
+            // Check if ImageUrl is not null before accessing OriginalString
+            if (task.Result.ImageUrl != null)
+            {
+                imageURL = task.Result.ImageUrl.OriginalString;
+                StartCoroutine(LoadProfilePic(imageURL));
+            }
+            else
+            {
+                Debug.Log("GoogleLoginManager OnAuthenticationFinished: No profile picture available.");
+            }
+
             googleLoginbool = true;
 
-            //Name = task.Result.DisplayName;
-
-            //userNameStr = userNameTxt.text;
-            //userEmailTxt.text = "" + task.Result.Email;
             PlayerPrefs.SetString("DisplayName", task.Result.DisplayName);
             PlayerPrefs.SetString("LoadProfilePic", imageURL);
             PlayerPrefs.Save();
+
+            SceneManager.LoadScene("MainMenu");
         }
     }
 
@@ -119,7 +124,7 @@ public class GoogleLoginManager : MonoBehaviour
         yield return www;
 
         _profilePic = Sprite.Create(www.texture, new Rect(0, 0, www.texture.width, www.texture.height), new Vector2(0, 0));
-        SceneManager.LoadScene("MainMenu");
+
     }
 
     public void OnSignOut()
@@ -128,12 +133,17 @@ public class GoogleLoginManager : MonoBehaviour
         //userEmailTxt.text = "";
 
         if (imageURL != null) imageURL = "";
-        //loginPanel.SetActive(true);
-        //profilePanel.SetActive(false);
         Debug.Log("Calling SignOut");
         // PlayerPrefs.Save();
         GoogleSignIn.DefaultInstance.SignOut();
         SceneManager.LoadScene("LoginScene");
         googleLoginbool = false;
+    }
+
+    public void destroy()
+    {
+        GoogleSignIn.DefaultInstance.SignOut();
+        if (this.gameObject != null)
+            DestroyImmediate(this.gameObject);
     }
 }

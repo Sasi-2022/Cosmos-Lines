@@ -9,6 +9,8 @@
     <package>com.facebook.android:facebook-gamingservices:[17.0.0,18)</package>
     <package>com.facebook.android:facebook-login:[17.0.0,18)</package>
     <package>com.facebook.android:facebook-share:[17.0.0,18)</package>
+    <package>com.google.android.gms:play-services-auth:16+</package>
+    <package>com.google.signin:google-signin-support:1.0.4</package>
     <package>com.parse.bolts:bolts-android:1.4.0</package>
   </packages>
   <files />
