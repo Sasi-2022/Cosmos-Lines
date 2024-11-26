@@ -1179,7 +1179,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1911434197}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: FaceBookLogin, Assembly-CSharp
         m_MethodName: NextBTN
         m_Mode: 1
@@ -1711,9 +1711,7 @@ MonoBehaviour:
   FB_userName: {fileID: 432031179}
   FB_userId: {fileID: 1819666226}
   FB_userDp: {fileID: 1781058657}
-  LoginPanel: {fileID: 97519366}
-  LoginPanel1: {fileID: 682083389}
-  Next: {fileID: 2129286689}
+  panel: {fileID: 97519366}
 --- !u!224 &1998855805 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 7906813231351907922, guid: 35bfcc840ae0e448b95b31616aa206f6, type: 3}
