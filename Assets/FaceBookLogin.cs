@@ -13,9 +13,20 @@ public class FaceBookLogin : MonoBehaviour
     public TextMeshProUGUI FB_userId;
     public Image FB_userDp;
     public GameObject panel;
+    public bool FBLoginbool = false;
+    public static FaceBookLogin instance;
 
     private void Awake()
     {
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(this);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
         if (!FB.IsInitialized)
         {
             FB.Init(InitCallback);
@@ -85,6 +96,7 @@ public class FaceBookLogin : MonoBehaviour
 
             // Retrieve user data
             FB.API("/me?fields=id,first_name,last_name,email", HttpMethod.GET, UserDataCallback);
+            FBLoginbool = true;
             panel.gameObject.SetActive(true);
         }
     }

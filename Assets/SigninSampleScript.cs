@@ -18,14 +18,18 @@ public class SigninSampleScript : MonoBehaviour
     public Sprite _profilePic;
     public string Name;
     //private const string GUEST_LOGIN_KEY = "GuestLogin";
-    public bool googleLoginbool;
-    public bool guestloginbool;
+    public bool googleLoginbool = false;
     public string guestId;
     public GameObject panel;
+    public bool FacebookLogin = false;
+    public TextMeshProUGUI gname;
+    public TextMeshProUGUI id;
+    public Image Google_userDp;
+
 
     // public GameObject loginPanel, profilePanel;
     private GoogleSignInConfiguration configuration;
-    public string webClientId = "759548581028-f2i25hi11d96hpujv7r736vs1h3gri5i.apps.googleusercontent.com";
+    public string webClientId = "428715215399-mojnuu26nd7ge9oqvbi2n4slt8n87rib.apps.googleusercontent.com";
 
 
 
@@ -103,7 +107,9 @@ public class SigninSampleScript : MonoBehaviour
         else
         {
             userNameStr = "" + task.Result.DisplayName;
+            gname.text = userNameStr;
             Debug.LogError("Welcome: " + task.Result.DisplayName + "!");
+            id.text = task.Result.IdToken;
             imageURL = task.Result.ImageUrl?.ToString();
             StartCoroutine(LoadProfilePic(task.Result.ImageUrl.ToString()));
             googleLoginbool = true;
@@ -130,7 +136,14 @@ public class SigninSampleScript : MonoBehaviour
         yield return www;
 
         _profilePic = Sprite.Create(www.texture, new Rect(0, 0, www.texture.width, www.texture.height), new Vector2(0, 0));
-       // panel.gameObject.SetActive(true);
+        Google_userDp.sprite = _profilePic;
+        // panel.gameObject.SetActive(true);
+    }
+    internal void OnAssignData(Task<GoogleSignInUser> task)
+    {
+        userNameStr = "" + task.Result.DisplayName;
+        gname.text = userNameStr;
+        id.text = task.Result.IdToken;
     }
 
     public void OnSignOut()
@@ -151,7 +164,8 @@ public class SigninSampleScript : MonoBehaviour
     {
         yield return new WaitForSeconds(0.3f);
         panel.gameObject.SetActive(true);
+        GoogleSignIn.DefaultInstance.SignIn().ContinueWith(
+            OnAssignData, TaskScheduler.Default);
+
     }
 }
-
-    

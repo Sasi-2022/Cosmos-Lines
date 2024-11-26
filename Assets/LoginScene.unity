@@ -491,6 +491,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   LoginPanel1: {fileID: 97519366}
   LoginPanel: {fileID: 682083389}
+  guestlogin: 0
   statusText: {fileID: 432031179}
 --- !u!1 &680421426
 GameObject:
@@ -942,9 +943,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5106715372a0f4cf2829d1f0bd60193e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  statusText: {fileID: 432031179}
-  LoginPanel: {fileID: 97519366}
-  webClientId: 469113767278-gmqd22a84r6ebdn7106kjgm8i6qje3q9.apps.googleusercontent.com
+  imageURL: 
+  userNameStr: 
+  _profilePic: {fileID: 0}
+  Name: 
+  googleLoginbool: 0
+  guestId: 
+  panel: {fileID: 97519366}
+  FacebookLogin: 0
+  gname: {fileID: 432031179}
+  id: {fileID: 1819666226}
+  Google_userDp: {fileID: 1781058657}
+  webClientId: 428715215399-mojnuu26nd7ge9oqvbi2n4slt8n87rib.apps.googleusercontent.com
 --- !u!4 &1168055862
 Transform:
   m_ObjectHideFlags: 0
@@ -1179,9 +1189,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: FaceBookLogin, Assembly-CSharp
-        m_MethodName: NextBTN
+      - m_Target: {fileID: 1882570404}
+        m_TargetAssemblyTypeName: LoginManager, Assembly-CSharp
+        m_MethodName: OnClickPlayBtn
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1572,6 +1582,52 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!1 &1882570402
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1882570403}
+  - component: {fileID: 1882570404}
+  m_Layer: 0
+  m_Name: LoginManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1882570403
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1882570402}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.5722433, y: 1.0913571, z: 1870.2516}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1882570404
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1882570402}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc732ca3748f74d3090829acb3fb6831, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  logoutBtn: {fileID: 2129286689}
+  playBtn: {fileID: 1240006760}
 --- !u!1 &1905051912
 GameObject:
   m_ObjectHideFlags: 0
@@ -1712,6 +1768,7 @@ MonoBehaviour:
   FB_userId: {fileID: 1819666226}
   FB_userDp: {fileID: 1781058657}
   panel: {fileID: 97519366}
+  FBLoginbool: 0
 --- !u!224 &1998855805 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 7906813231351907922, guid: 35bfcc840ae0e448b95b31616aa206f6, type: 3}
@@ -1909,9 +1966,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1911434197}
-        m_TargetAssemblyTypeName: FaceBookLogin, Assembly-CSharp
-        m_MethodName: LogOut
+      - m_Target: {fileID: 1882570404}
+        m_TargetAssemblyTypeName: LoginManager, Assembly-CSharp
+        m_MethodName: LogOutButtonClk
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1920,42 +1977,6 @@ MonoBehaviour:
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 1168055861}
-        m_TargetAssemblyTypeName: SigninSampleScript, Assembly-CSharp
-        m_MethodName: OnSignOut
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 535275141}
-        m_TargetAssemblyTypeName: GuestLogin, Assembly-CSharp
-        m_MethodName: OnLogoutButtonClick
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 682083389}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
         m_CallState: 2
 --- !u!114 &2129286690
 MonoBehaviour:
@@ -2025,3 +2046,4 @@ SceneRoots:
   - {fileID: 1911434196}
   - {fileID: 1168055862}
   - {fileID: 535275140}
+  - {fileID: 1882570403}

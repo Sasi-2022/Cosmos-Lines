@@ -10,6 +10,8 @@ public class GuestLogin : MonoBehaviour
     private const string GuestDataFileName = "guestData.json"; // JSON file name to store guest data
     public GameObject LoginPanel1;
     public GameObject LoginPanel;
+    public bool guestlogin = false;
+    public static GuestLogin instance;
 
     public TextMeshProUGUI statusText; // UI Text element to display login status
 
@@ -26,6 +28,15 @@ public class GuestLogin : MonoBehaviour
 
     private void Awake()
     {
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(this);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
         localDataPath = Application.persistentDataPath + "/" + GuestDataFileName;
         LoadGuestData(); // Load data on startup if it exists
     }
@@ -54,11 +65,13 @@ public class GuestLogin : MonoBehaviour
         }
 
         LoginPanel1.SetActive(true);
+        guestlogin = true;
         LoginPanel.SetActive(false); // Hide login panel
     }
 
     public void OnLogoutButtonClick()
     {
+        guestlogin = false;
         LoginPanel.gameObject.SetActive(false);
         LoginPanel1.gameObject.SetActive(true);
 
