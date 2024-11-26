@@ -1,176 +1,157 @@
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Google;
-using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.SceneManagement;
 using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 using TMPro;
-using System.IO;
+using UnityEngine.UI;
+using Google;
+using System.Threading.Tasks;
+using UnityEngine.Networking;
+//using UnityEngine.SceneManagement;
+//using BizzyBeeGames.DotConnect;
 
 public class SigninSampleScript : MonoBehaviour
 {
-    public TextMeshProUGUI statusText;
-    public GameObject LoginPanel;
-    public string webClientId = "469113767278-gmqd22a84r6ebdn7106kjgm8i6qje3q9.apps.googleusercontent.com";
+    public static SigninSampleScript instance;
+    public string imageURL;
+    // public TextMeshProUGUI userNameTxt, userEmailTxt;
+    public string userNameStr;
+    public Sprite _profilePic;
+    public string Name;
+    //private const string GUEST_LOGIN_KEY = "GuestLogin";
+    public bool googleLoginbool;
+    public bool guestloginbool;
+    public string guestId;
+    public GameObject panel;
 
+    // public GameObject loginPanel, profilePanel;
     private GoogleSignInConfiguration configuration;
+    public string webClientId = "759548581028-f2i25hi11d96hpujv7r736vs1h3gri5i.apps.googleusercontent.com";
 
-    private string localDataPath;
 
-    // Serializable class for saving user data as JSON
-    [System.Serializable]
-    public class UserData
+
+    void Awake()
     {
-        public string displayName;
-        public string email;
-        public string userId;
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(this);
+        }
+        else
+        {
+            //instance = null;
+            Destroy(gameObject);
+        }
+
     }
 
-    private void Awake()
+    private void OnEnable()
     {
         configuration = new GoogleSignInConfiguration
         {
             WebClientId = webClientId,
-            RequestIdToken = true
+            RequestIdToken = true,
+            UseGameSignIn = false,
+            RequestEmail = true
         };
 
-        // Set up path for saving the data locally
-        localDataPath = Application.persistentDataPath + "/userData.json";
     }
 
     private void Start()
     {
-        LoadUserData(); // Attempt to load user data when the app starts
+
     }
+
 
     public void OnSignIn()
     {
+        //  LoadingScreenManager.Instance.ShowLoadingScreen("Signing in progress...");
         GoogleSignIn.Configuration = configuration;
         GoogleSignIn.Configuration.UseGameSignIn = false;
         GoogleSignIn.Configuration.RequestIdToken = true;
-        AddStatusText("Calling SignIn");
-        GoogleSignIn.DefaultInstance.SignOut();
-        StartCoroutine(SignInCoroutine());
-    }
+        GoogleSignIn.Configuration.RequestEmail = true;
+        Debug.LogError("Calling SignIn");
 
-    IEnumerator SignInCoroutine()
-    {
-        yield return new WaitForSeconds(0.2f);
-        GoogleSignIn.DefaultInstance.SignIn().ContinueWith(OnAuthenticationFinished);
-    }
-
-    public void OnSignOut()
-    {
-        Debug.Log("signout");
-        AddStatusText("Calling SignOut");
-        GoogleSignIn.DefaultInstance.SignOut();
-        PlayerPrefs.DeleteKey("USERNAME");
-        PlayerPrefs.DeleteKey("LOGIN");
-        // Clear saved user data file
-        if (File.Exists(localDataPath))
-        {
-            File.Delete(localDataPath);
-        }
-
-        LoginPanel.gameObject.SetActive(true);
-    }
-
-    public void OnDisconnect()
-    {
-        AddStatusText("Calling Disconnect");
-        GoogleSignIn.DefaultInstance.Disconnect();
+        GoogleSignIn.Configuration = configuration;
+        GoogleSignIn.DefaultInstance.SignIn().ContinueWith(
+            OnAuthenticationFinished, TaskScheduler.Default);
+        StartCoroutine(OpenPanel());
     }
 
     internal void OnAuthenticationFinished(Task<GoogleSignInUser> task)
     {
         if (task.IsFaulted)
         {
-            Debug.Log("task.IsFaulted ");
-            AddStatusText("Got Error: " + task.Exception.Message);
-            LoginPanel.gameObject.SetActive(true);
+            using (IEnumerator<System.Exception> enumerator =
+                task.Exception.InnerExceptions.GetEnumerator())
+            {
+                if (enumerator.MoveNext())
+                {
+                    GoogleSignIn.SignInException error =
+                        (GoogleSignIn.SignInException)enumerator.Current;
+                    Debug.LogError("Got Error: " + error.Status + " " + error.Message);
+                }
+                else
+                {
+                    Debug.LogError("Got unexpected exception?!?" + task.Exception);
+                }
+            }
         }
         else if (task.IsCanceled)
         {
-            Debug.Log("task.IsCanceled");
-            AddStatusText("Canceled");
-            LoginPanel.gameObject.SetActive(true);
+            Debug.LogError("Cancelled");
         }
         else
         {
-            Debug.Log("task.success ");
-            AddStatusText("Welcome: " + task.Result.DisplayName + "!");
-            // Save user data locally (PlayerPrefs and JSON file)
-            SaveUserData(task.Result);
-            LoginPanel.gameObject.SetActive(true);
+            userNameStr = "" + task.Result.DisplayName;
+            Debug.LogError("Welcome: " + task.Result.DisplayName + "!");
+            imageURL = task.Result.ImageUrl?.ToString();
+            StartCoroutine(LoadProfilePic(task.Result.ImageUrl.ToString()));
+            googleLoginbool = true;
+
+            //Name = task.Result.DisplayName;
+
+            //userNameStr = userNameTxt.text;
+            //userEmailTxt.text = "" + task.Result.Email;
+            PlayerPrefs.SetString("DisplayName", task.Result.DisplayName);
+            PlayerPrefs.SetString("LoadProfilePic", imageURL);
+            PlayerPrefs.Save();
+
+            // UserSessionManager.Instance.LoginType = LoginType.Google;
+            // UserSessionManager.Instance.UserId = task.Result.UserId;
+            //PlayerPrefs.SetString("GProfilePic", task.Result.ImageUrl);
+            //SceneManager.LoadScene("Main");
         }
     }
 
-    public void OnSignInSilently()
-    {
-        GoogleSignIn.Configuration = configuration;
-        GoogleSignIn.Configuration.UseGameSignIn = false;
-        GoogleSignIn.Configuration.RequestIdToken = true;
-        AddStatusText("Calling SignIn Silently");
 
-        GoogleSignIn.DefaultInstance.SignInSilently()
-              .ContinueWith(OnAuthenticationFinished);
+    IEnumerator LoadProfilePic(string imageUrl)
+    {
+        WWW www = new WWW(imageUrl);
+        yield return www;
+
+        _profilePic = Sprite.Create(www.texture, new Rect(0, 0, www.texture.width, www.texture.height), new Vector2(0, 0));
+       // panel.gameObject.SetActive(true);
     }
 
-    public void OnGamesSignIn()
+    public void OnSignOut()
     {
-        GoogleSignIn.Configuration = configuration;
-        GoogleSignIn.Configuration.UseGameSignIn = true;
-        GoogleSignIn.Configuration.RequestIdToken = false;
+        if (userNameStr != null) userNameStr = "";
+        //userEmailTxt.text = "";
 
-        AddStatusText("Calling Games SignIn");
-
-        GoogleSignIn.DefaultInstance.SignIn().ContinueWith(
-          OnAuthenticationFinished);
+        if (imageURL != null) imageURL = "";
+        //loginPanel.SetActive(true);
+        //profilePanel.SetActive(false);
+        Debug.Log("Calling SignOut");
+        // PlayerPrefs.Save();
+        GoogleSignIn.DefaultInstance.SignOut();
+        panel.gameObject.SetActive(false);
+        googleLoginbool = false;
     }
-
-    private List<string> messages = new List<string>();
-    void AddStatusText(string text)
+    IEnumerator OpenPanel()
     {
-        statusText.text += text + "\n";
-        Debug.Log(statusText.text);
-    }
-
-    // Save user data locally in a JSON file
-    private void SaveUserData(GoogleSignInUser user)
-    {
-        UserData userData = new UserData
-        {
-            displayName = user.DisplayName,
-            email = user.Email,
-            userId = user.UserId
-        };
-
-        // Serialize to JSON and save to file
-        string jsonData = JsonUtility.ToJson(userData, true);
-        File.WriteAllText(localDataPath, jsonData);
-        Debug.Log("User data saved to file.");
-
-        // Also store basic info in PlayerPrefs (optional)
-        PlayerPrefs.SetString("USERNAME", user.DisplayName);
-        PlayerPrefs.SetString("EMAIL", user.Email);
-        PlayerPrefs.SetString("USER_ID", user.UserId);
-        PlayerPrefs.Save();
-    }
-
-    // Load user data from the JSON file
-    private void LoadUserData()
-    {
-        if (File.Exists(localDataPath))
-        {
-            string jsonData = File.ReadAllText(localDataPath);
-            UserData loadedData = JsonUtility.FromJson<UserData>(jsonData);
-            AddStatusText("Welcome back: " + loadedData.displayName);
-        }
-        else
-        {
-            Debug.Log("No user data found. Please log in.");
-        }
+        yield return new WaitForSeconds(0.3f);
+        panel.gameObject.SetActive(true);
     }
 }
+
+    
