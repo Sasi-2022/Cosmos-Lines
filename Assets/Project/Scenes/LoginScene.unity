@@ -123,6 +123,11 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &423044616 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5169204166202535163, guid: 917995d4fabb0c54a9dc0e7a18f1803e, type: 3}
+  m_PrefabInstance: {fileID: 523021615}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &523021615
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -131,6 +136,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2077333620521231645, guid: 917995d4fabb0c54a9dc0e7a18f1803e, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 514.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2077333620521231645, guid: 917995d4fabb0c54a9dc0e7a18f1803e, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -156.29999
+      objectReference: {fileID: 0}
     - target: {fileID: 2622808646223943375, guid: 917995d4fabb0c54a9dc0e7a18f1803e, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -215,14 +228,38 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3860437244267972650, guid: 917995d4fabb0c54a9dc0e7a18f1803e, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 2129446187}
+    - target: {fileID: 3860437244267972650, guid: 917995d4fabb0c54a9dc0e7a18f1803e, type: 3}
+      propertyPath: m_RenderMode
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5103708513185154774, guid: 917995d4fabb0c54a9dc0e7a18f1803e, type: 3}
       propertyPath: m_Name
       value: Canvas
+      objectReference: {fileID: 0}
+    - target: {fileID: 5699149541320934968, guid: 917995d4fabb0c54a9dc0e7a18f1803e, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5699149541320934968, guid: 917995d4fabb0c54a9dc0e7a18f1803e, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5699149541320934968, guid: 917995d4fabb0c54a9dc0e7a18f1803e, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5770981087302707285, guid: 917995d4fabb0c54a9dc0e7a18f1803e, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 688995498}
+    - target: {fileID: 7107869802695861094, guid: 917995d4fabb0c54a9dc0e7a18f1803e, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -195.79999
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -274,6 +311,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: 
   fbProfilepicTexture: {fileID: 0}
+  panel: {fileID: 423044616}
   FBLoginbool: 0
 --- !u!1 &832767414
 GameObject:
