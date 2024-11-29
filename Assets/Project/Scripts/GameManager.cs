@@ -1,6 +1,7 @@
 using Connect.Common;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Connect.Core
 {
@@ -9,6 +10,7 @@ namespace Connect.Core
         #region START_METHODS
 
         public static GameManager Instance;
+        public Button BackBtn;
 
         private void Awake()
         {
@@ -1503,6 +1505,7 @@ namespace Connect.Core
 
         private const string MainMenu = "MainMenu";
         private const string Gameplay = "Gameplay";
+        private const string LoginScene = "LoginScene";
 
         public void GoToMainMenu()
         {
@@ -1512,6 +1515,11 @@ namespace Connect.Core
         public void GoToGameplay()
         {
             UnityEngine.SceneManagement.SceneManager.LoadScene(Gameplay);
+        }
+
+        public void OnClickBackBtn()
+        {
+            UnityEngine.SceneManagement.SceneManager.LoadScene(LoginScene);
         }
 
         #endregion

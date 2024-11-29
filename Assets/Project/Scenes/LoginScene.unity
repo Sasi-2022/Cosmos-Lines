@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44407493, g: 0.49331808, b: 0.5724013, a: 1}
+  m_IndirectSpecularColor: {r: 0.4439128, g: 0.49315536, b: 0.5722086, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -131,58 +131,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 170433990453073355, guid: 917995d4fabb0c54a9dc0e7a18f1803e, type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 828170969713344771, guid: 917995d4fabb0c54a9dc0e7a18f1803e, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 929687656670449957, guid: 917995d4fabb0c54a9dc0e7a18f1803e, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: -23
-      objectReference: {fileID: 0}
-    - target: {fileID: 1058273519362294159, guid: 917995d4fabb0c54a9dc0e7a18f1803e, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 1287504762385731159, guid: 917995d4fabb0c54a9dc0e7a18f1803e, type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 21300000, guid: 6753275b0fa734dfc91f8ab54d36c1dd, type: 3}
-    - target: {fileID: 2480363392287643980, guid: 917995d4fabb0c54a9dc0e7a18f1803e, type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 21300000, guid: ab240676ead75440981a7a2266e08fda, type: 3}
-    - target: {fileID: 2622808646223943375, guid: 917995d4fabb0c54a9dc0e7a18f1803e, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2622808646223943375, guid: 917995d4fabb0c54a9dc0e7a18f1803e, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 2622808646223943375, guid: 917995d4fabb0c54a9dc0e7a18f1803e, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1846768921}
-    - target: {fileID: 2622808646223943375, guid: 917995d4fabb0c54a9dc0e7a18f1803e, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 2622808646223943375, guid: 917995d4fabb0c54a9dc0e7a18f1803e, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: OnSignIn
-      objectReference: {fileID: 0}
-    - target: {fileID: 2622808646223943375, guid: 917995d4fabb0c54a9dc0e7a18f1803e, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: GoogleLoginManager, Connect.Core
-      objectReference: {fileID: 0}
-    - target: {fileID: 2622808646223943375, guid: 917995d4fabb0c54a9dc0e7a18f1803e, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: UnityEngine.Object, UnityEngine
-      objectReference: {fileID: 0}
     - target: {fileID: 2763630318282802246, guid: 917995d4fabb0c54a9dc0e7a18f1803e, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -263,120 +215,20 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3166571121957361572, guid: 917995d4fabb0c54a9dc0e7a18f1803e, type: 3}
-      propertyPath: m_ReferenceResolution.x
-      value: 1920
-      objectReference: {fileID: 0}
-    - target: {fileID: 3166571121957361572, guid: 917995d4fabb0c54a9dc0e7a18f1803e, type: 3}
-      propertyPath: m_ReferenceResolution.y
-      value: 1080
-      objectReference: {fileID: 0}
-    - target: {fileID: 3773441410117625981, guid: 917995d4fabb0c54a9dc0e7a18f1803e, type: 3}
-      propertyPath: googleAuth
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 4540748172709485111, guid: 917995d4fabb0c54a9dc0e7a18f1803e, type: 3}
-      propertyPath: m_fontSize
-      value: 15
-      objectReference: {fileID: 0}
-    - target: {fileID: 4540748172709485111, guid: 917995d4fabb0c54a9dc0e7a18f1803e, type: 3}
-      propertyPath: m_fontAsset
-      value: 
-      objectReference: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-    - target: {fileID: 4540748172709485111, guid: 917995d4fabb0c54a9dc0e7a18f1803e, type: 3}
-      propertyPath: m_fontStyle
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4540748172709485111, guid: 917995d4fabb0c54a9dc0e7a18f1803e, type: 3}
-      propertyPath: m_fontColor.b
-      value: 0.9207079
-      objectReference: {fileID: 0}
-    - target: {fileID: 4540748172709485111, guid: 917995d4fabb0c54a9dc0e7a18f1803e, type: 3}
-      propertyPath: m_fontColor.g
-      value: 0.9528302
-      objectReference: {fileID: 0}
-    - target: {fileID: 4540748172709485111, guid: 917995d4fabb0c54a9dc0e7a18f1803e, type: 3}
-      propertyPath: m_fontColor.r
-      value: 0.91237986
-      objectReference: {fileID: 0}
-    - target: {fileID: 4540748172709485111, guid: 917995d4fabb0c54a9dc0e7a18f1803e, type: 3}
-      propertyPath: m_fontSizeBase
-      value: 15
-      objectReference: {fileID: 0}
-    - target: {fileID: 4540748172709485111, guid: 917995d4fabb0c54a9dc0e7a18f1803e, type: 3}
-      propertyPath: m_sharedMaterial
-      value: 
-      objectReference: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-    - target: {fileID: 4540748172709485111, guid: 917995d4fabb0c54a9dc0e7a18f1803e, type: 3}
-      propertyPath: m_fontColor32.rgba
-      value: 4293653481
-      objectReference: {fileID: 0}
-    - target: {fileID: 4540748172709485111, guid: 917995d4fabb0c54a9dc0e7a18f1803e, type: 3}
-      propertyPath: m_hasFontAssetChanged
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 5103708513185154774, guid: 917995d4fabb0c54a9dc0e7a18f1803e, type: 3}
       propertyPath: m_Name
       value: Canvas
       objectReference: {fileID: 0}
-    - target: {fileID: 5103708513185154774, guid: 917995d4fabb0c54a9dc0e7a18f1803e, type: 3}
+    - target: {fileID: 5169204166202535163, guid: 917995d4fabb0c54a9dc0e7a18f1803e, type: 3}
       propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5770981087302707285, guid: 917995d4fabb0c54a9dc0e7a18f1803e, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5770981087302707285, guid: 917995d4fabb0c54a9dc0e7a18f1803e, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5770981087302707285, guid: 917995d4fabb0c54a9dc0e7a18f1803e, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 688995498}
-    - target: {fileID: 5770981087302707285, guid: 917995d4fabb0c54a9dc0e7a18f1803e, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 5770981087302707285, guid: 917995d4fabb0c54a9dc0e7a18f1803e, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: Facebook_LogIn
-      objectReference: {fileID: 0}
-    - target: {fileID: 5770981087302707285, guid: 917995d4fabb0c54a9dc0e7a18f1803e, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: FacebookLoginManager, Connect.Core
-      objectReference: {fileID: 0}
-    - target: {fileID: 5770981087302707285, guid: 917995d4fabb0c54a9dc0e7a18f1803e, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: UnityEngine.Object, UnityEngine
-      objectReference: {fileID: 0}
-    - target: {fileID: 6124445343360893296, guid: 917995d4fabb0c54a9dc0e7a18f1803e, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: -64
-      objectReference: {fileID: 0}
-    - target: {fileID: 6513042687257290259, guid: 917995d4fabb0c54a9dc0e7a18f1803e, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 6854060066793648487, guid: 917995d4fabb0c54a9dc0e7a18f1803e, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: -102
-      objectReference: {fileID: 0}
-    - target: {fileID: 6935783048865685977, guid: 917995d4fabb0c54a9dc0e7a18f1803e, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 2.2
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects:
-    - {fileID: 5253594504155950228, guid: 917995d4fabb0c54a9dc0e7a18f1803e, type: 3}
-    - {fileID: 7292531629112724559, guid: 917995d4fabb0c54a9dc0e7a18f1803e, type: 3}
-    - {fileID: 7615235052408815368, guid: 917995d4fabb0c54a9dc0e7a18f1803e, type: 3}
-    - {fileID: 8510818869064651692, guid: 917995d4fabb0c54a9dc0e7a18f1803e, type: 3}
-    - {fileID: 8237709894428819115, guid: 917995d4fabb0c54a9dc0e7a18f1803e, type: 3}
-    - {fileID: 3648100532056779443, guid: 917995d4fabb0c54a9dc0e7a18f1803e, type: 3}
-    - {fileID: 288345088220831774, guid: 917995d4fabb0c54a9dc0e7a18f1803e, type: 3}
-    - {fileID: 8210431868066278677, guid: 917995d4fabb0c54a9dc0e7a18f1803e, type: 3}
+    m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 917995d4fabb0c54a9dc0e7a18f1803e, type: 3}
@@ -638,7 +490,6 @@ MonoBehaviour:
   _profilePic: {fileID: 0}
   Name: 
   googleLoginbool: 0
-  webClientId: 769452306799-qfjdd9pvs5n2qt9ujgl0ii320s2h21kc.apps.googleusercontent.com
 --- !u!1 &2129446185
 GameObject:
   m_ObjectHideFlags: 0
