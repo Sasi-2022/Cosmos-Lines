@@ -1,178 +1,156 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 using Facebook.Unity;
-using UnityEngine.SceneManagement;
+using System;
+using UnityEngine.Networking; // For fetching the profile picture from URL
 
-public class FacebookLoginManager : MonoBehaviour
+public class FaceBookLogin : MonoBehaviour
 {
-    //public TextMeshProUGUI FB_userName;
-    public string Name;
-    //public Image FB_profilePic;
-    // public RawImage rawImg;
-    public Texture fbProfilepicTexture;
-
+    public TextMeshProUGUI FB_userName;
+    public TextMeshProUGUI FB_userId;
+    public Image FB_userDp;
+    public GameObject panel;
     public bool FBLoginbool = false;
-
-    #region Initialize
+    public static FaceBookLogin instance;
+    public GameObject GuestBtn;
+    public GameObject logintext;
 
     private void Awake()
     {
-        //FB.Init(SetInit, onHidenUnity);
-
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(this);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
         if (!FB.IsInitialized)
         {
-            FB.Init(() =>
-            {
-                if (FB.IsInitialized)
-                    FB.ActivateApp();
-                else
-                    print("Couldn't initialize");
-            },
-            isGameShown =>
-            {
-                if (!isGameShown)
-                    Time.timeScale = 0;
-                else
-                    Time.timeScale = 1;
-            });
+            FB.Init(InitCallback);
         }
         else
+        {
             FB.ActivateApp();
+        }
     }
 
-    void SetInit()
+    private void InitCallback()
+    {
+        if (FB.IsInitialized)
+        {
+            FB.ActivateApp();
+        }
+        else
+        {
+            Debug.Log("Failed to initialize the Facebook SDK");
+        }
+    }
+
+    public void Login()
+    {
+        logintext.gameObject.SetActive(true);
+        if (!FB.IsLoggedIn)
+        {
+            FB.LogInWithReadPermissions(new List<string> { "public_profile", "email" }, LoginCallback);
+        }
+        else
+        {
+            Debug.Log("Already logged in to Facebook");
+        }
+    }
+    public void LogOut()
     {
         if (FB.IsLoggedIn)
         {
-            Debug.Log("Facebook is Login!");
-            string s = "client token" + FB.ClientToken + "User Id" + AccessToken.CurrentAccessToken.UserId + "token string" + AccessToken.CurrentAccessToken.TokenString;
+            FB.LogOut();
+            panel.gameObject.SetActive(false);
+            ResetUserData();
         }
         else
         {
-            Debug.Log("Facebook is not Logged in!");
-        }
-        DealWithFbMenus(FB.IsLoggedIn);
-    }
-
-    void onHidenUnity(bool isGameShown)
-    {
-        if (!isGameShown)
-        {
-            Time.timeScale = 0;
-        }
-        else
-        {
-            Time.timeScale = 1;
+            Debug.Log("Not logged in to Facebook");
         }
     }
-
-    void DealWithFbMenus(bool isLoggedIn)
+    private void ResetUserData()
     {
-        if (isLoggedIn)
+        FB_userName.text = "New Text";
+        FB_userId.text = "New Text";
+        FB_userDp.sprite = null;
+    }
+
+    private void LoginCallback(ILoginResult result)
+    {
+        if (result.Cancelled)
         {
-            FB.API("/me?fields=first_name", HttpMethod.GET, DisplayUsername);
-            FB.API("/me/picture?type=square&height=128&width=128", HttpMethod.GET, DisplayProfilePic);
-            SceneManager.LoadScene("MainMenu");
+            Debug.Log("Facebook login cancelled");
+        }
+        else if (!string.IsNullOrEmpty(result.Error))
+        {
+            Debug.Log("Facebook login error: " + result.Error);
+        }
+        else if (FB.IsLoggedIn)
+        {
+            Debug.Log("Facebook login successful");
+
+            // Retrieve user data
+            FB.API("/me?fields=id,first_name,last_name,email", HttpMethod.GET, UserDataCallback);
             FBLoginbool = true;
+            panel.gameObject.SetActive(true);
+            GuestBtn.gameObject.SetActive(false);
+        }
+    }
+
+    private void UserDataCallback(IGraphResult result)
+    {
+        if (result.Error != null)
+        {
+            Debug.Log("Error retrieving user data: " + result.Error);
         }
         else
         {
-            print("Not logged in");
+            var userData = result.ResultDictionary;
+            string userId = userData["id"].ToString();
+            string firstName = userData["first_name"].ToString();
+            FB_userName.text = firstName;
+            FB_userId.text = userId;
+            FB.API("/me/picture?redirect=false&type=large", HttpMethod.GET, ProfilePictureCallback);
         }
     }
-    void DisplayUsername(IResult result)
+    private void ProfilePictureCallback(IGraphResult result)
     {
-        if (result.Error == null)
+        if (result.Error != null)
         {
-            string name = "" + result.ResultDictionary["first_name"];
-            if (Name != null) Name = name;
-            Name = name;
-            //fbUsernameStr = FB_userName.text;
-            Debug.Log("" + name);
+            Debug.Log("Error retrieving profile picture: " + result.Error);
         }
         else
         {
-            Debug.Log(result.Error);
+            var pictureData = result.ResultDictionary["data"] as Dictionary<string, object>;
+            string pictureURL = pictureData["url"].ToString();
+
+            Debug.Log("Profile Picture URL: " + pictureURL);
+            StartCoroutine(FetchProfilePicture(pictureURL));
         }
     }
-    void DisplayProfilePic(IGraphResult result)
-    {
-        if (result.Texture != null)
-        {
-            Debug.Log("Profile Pic");
-            fbProfilepicTexture = result.Texture;
-            //fbProfilepicTexture = rawImg.texture;
-            //if (FB_profilePic != null) FB_profilePic.sprite = Sprite.Create(result.Texture, new Rect(0, 0, 128, 128), new Vector2());
-            /*JSONObject json = new JSONObject(result.RawResult);
 
-            StartCoroutine(DownloadTexture(json["picture"]["data"]["url"].str, profile_texture));*/
+    private IEnumerator FetchProfilePicture(string pictureURL)
+    {
+        UnityWebRequest www = UnityWebRequestTexture.GetTexture(pictureURL);
+        yield return www.SendWebRequest();
+
+        if (www.result == UnityWebRequest.Result.Success)
+        {
+            Texture2D texture = DownloadHandlerTexture.GetContent(www);
+            FB_userDp.sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), Vector2.zero);
         }
         else
         {
-            Debug.Log(result.Error);
+            Debug.Log("Error fetching profile picture: " + www.error);
         }
     }
-
-
-
-    #endregion
-
-
-    //login
-    public void Facebook_LogIn()
-    {
-        List<string> permissions = new List<string>();
-        permissions.Add("public_profile");
-        //permissions.Add("user_friends");
-        FB.LogInWithReadPermissions(permissions, AuthCallBack);
-    }
-    void AuthCallBack(IResult result)
-    {
-        if (FB.IsLoggedIn)
-        {
-            SetInit();
-            //AccessToken class will have session details
-            var aToken = AccessToken.CurrentAccessToken;
-            foreach (string perm in aToken.Permissions)
-            {
-                print(perm);
-            }
-        }
-        else
-        {
-            Debug.Log("Failed to log in");
-        }
-
-    }
-
-
-
-
-    //logout
-    public void Facebook_LogOut()
-    {
-        //StartCoroutine(LogOut());
-        LogOut();
-    }
-    private void LogOut()
-    {
-        FB.LogOut();
-        /* while (FB.IsLoggedIn)
-         {
-             print("Logging Out");
-             yield return null;
-         }*/
-        // if (FB_profilePic != null) FB_profilePic.sprite = null;
-        if (Name != null) Name = "";
-        if (fbProfilepicTexture != null) fbProfilepicTexture = null;
-        //PlayerPrefs.Save();
-        SceneManager.LoadScene("LoginScene");
-    }
-
-
-    #region other
-    #endregion
-
 }
 
