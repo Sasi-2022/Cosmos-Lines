@@ -1,6 +1,7 @@
 using Connect.Common;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace Connect.Core
@@ -19,6 +20,7 @@ namespace Connect.Core
                 Instance = this;
                 Init();
                 DontDestroyOnLoad(gameObject);
+                SceneManager.sceneLoaded += OnSceneLoaded;
                 return;
             }
             else
@@ -40,12 +42,28 @@ namespace Connect.Core
             }*/
         }
 
+        private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+        {
+            // Assign the BackBtn reference after the scene is loaded
+            BackBtn = GameObject.Find("BackBtn")?.GetComponent<Button>();
+
+            if (BackBtn != null)
+            {
+                // Ensure the button is interactive and add a listener for clicks
+                BackBtn.onClick.AddListener(OnClickBackBtn);
+            }
+            else
+            {
+                Debug.LogWarning("Back button not found in scene.");
+            }
+        }
+
 
         #endregion
 
         #region GAME_VARIABLES
 
-        
+
         public int CurrentStage;
 
         

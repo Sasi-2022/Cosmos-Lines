@@ -15,8 +15,8 @@ public class GoogleLoginManager : MonoBehaviour
     public Sprite _profilePic;
     public string Name;
     public bool googleLoginbool = false;
+    public GameObject defaultAvatar;
     private GoogleSignInConfiguration configuration;
-   // private string webClientId = "YOUR_WEB_CLIENT_ID";  // Replace with your actual Web Client ID
     private string webClientId = "1051490529515-k6q6bgda78o0q34au9an9crb5bum7kc8.apps.googleusercontent.com";
 
     public static GoogleLoginManager instance;
@@ -33,11 +33,7 @@ public class GoogleLoginManager : MonoBehaviour
 
     void Awake()
     {
-        Debug.Log("Elan google login manager Awake");
-        // Debug.Log("GoogleLoginManager Awake==>" + GlobalManager.Instance); 
-        // GlobalManager.Instance.googleLoginManager = this;
-        // Don't destroy game object in Awake if you don't need this across scenes
-        // DontDestroyOnLoad(gameObject);
+        Debug.Log("Google login manager Awake");
 
         configuration = new GoogleSignInConfiguration
         {
@@ -50,19 +46,14 @@ public class GoogleLoginManager : MonoBehaviour
 
     private void Start()
     {
-        Debug.Log("Elan google login manager Start");
+        Debug.Log("Google login manager Start");
 
-        //GlobalManager.Instance.InitializeGoogleLogin();
+        GlobalManager.Instance.InitializeGoogleLogin();
         googleLoginbool = PlayerPrefs.GetInt("googleLoginbool", 0) == 1;
-        Debug.Log("Elan google login manager Star===>"+ googleLoginbool);
         if (googleLoginbool)
         {
-            Debug.Log("Elan google login manager Star 11111===>" + googleLoginbool);
             LoadGoogleData();
-            if (panel != null) panel.SetActive(true);
-            if (openpanel != null) openpanel.SetActive(true);
-            if (GuestBtn != null) GuestBtn.SetActive(false);
-            Debug.Log("Elan google login manager Star 222222===>" + googleLoginbool);
+            StartCoroutine(ShowPanels());
         }
 
         SceneManager.sceneLoaded += OnSceneLoaded;
@@ -77,15 +68,12 @@ public class GoogleLoginManager : MonoBehaviour
     {
         GoogleSignIn.Configuration = configuration;
         GoogleSignIn.DefaultInstance.SignIn().ContinueWith(OnAuthenticationFinished);
-       // StartCoroutine(OpenPanel());
     }
 
     internal void OnAuthenticationFinished(Task<GoogleSignInUser> task)
     {
-        Debug.Log("Elan google login manager OnAuthenticationFinished===>");
         if (task.IsFaulted)
         {
-            Debug.Log("Elan google login manager OnAuthenticationFinished 11111===>");
             Debug.LogError("Google SignIn failed.");
             foreach (var exception in task.Exception.InnerExceptions)
             {
@@ -95,68 +83,60 @@ public class GoogleLoginManager : MonoBehaviour
         }
         else if (task.IsCanceled)
         {
-            Debug.Log("Elan google login manager OnAuthenticationFinished 22222===>");
             Debug.LogError("Google SignIn was canceled.");
         }
         else
         {
-            Debug.Log("Elan google login manager OnAuthenticationFinished 333333===>");
             userNameStr = task.Result.DisplayName;
             gname.text = userNameStr;
             id.text = task.Result.IdToken;
-            Debug.Log("Elan google login manager OnAuthenticationFinished 444444===>");
+
             googleLoginbool = true;
             PlayerPrefs.SetInt("googleLoginbool", googleLoginbool ? 1 : 0);
             PlayerPrefs.SetString(GoogleUserNameKey, task.Result.DisplayName);
             PlayerPrefs.SetString(GoogleUserIdKey, task.Result.IdToken);
             PlayerPrefs.Save();
-            Debug.Log("Elan google login manager OnAuthenticationFinished 55555===>");
-            if (panel != null) panel.SetActive(true);
-            Debug.Log("Elan google login manager OnAuthenticationFinished 55555 aaaaaa===>");
-            if (openpanel != null) openpanel.SetActive(true);
-            Debug.Log("Elan google login manager OnAuthenticationFinished 55555 bbbbbb===>");
-            if (GuestBtn != null) GuestBtn.SetActive(false);
-            Debug.Log("Elan google login manager OnAuthenticationFinished 66666===>");
-        }
-    }
 
-    internal void OnAssignData(Task<GoogleSignInUser> task)
-    {
-        userNameStr = task.Result.DisplayName;
-        gname.text = userNameStr;
-        id.text = task.Result.IdToken;
+            StartCoroutine(ShowPanels());
+            if (defaultAvatar != null)
+                defaultAvatar.SetActive(task.Result.ImageUrl == null);
+        }
     }
 
     public void OnSignOut()
     {
-        Debug.Log("Elan google login manager OnSignOut 11111===>");
         PlayerPrefs.DeleteKey(GoogleUserNameKey);
         PlayerPrefs.DeleteKey(GoogleUserIdKey);
         PlayerPrefs.DeleteKey(GoogleUserDpKey);
         PlayerPrefs.DeleteKey("googleLoginbool");
         PlayerPrefs.Save();
-        Debug.Log("Elan google login manager OnSignOut 22222===>");
+
         GoogleSignIn.DefaultInstance.SignOut();
         googleLoginbool = false;
         ResetUserData();
-        Debug.Log("Elan google login manager OnSignOut 33333===>");
-        if (panel != null) panel.SetActive(false);
-        if (openpanel != null) openpanel.SetActive(false);
-        if (GuestBtn != null) GuestBtn.SetActive(true);
-        Debug.Log("Elan google login manager OnSignOut 44444===>");
+
+        StartCoroutine(HidePanels());
     }
 
     private void ResetUserData()
     {
         if (gname != null) gname.text = "New Text";
-        else Debug.LogError("gname is null before resetting!");
     }
 
-    IEnumerator OpenPanel()
+    private IEnumerator ShowPanels()
     {
-        yield return new WaitForSeconds(0.3f);
-        panel.gameObject.SetActive(true);
-        //GoogleSignIn.DefaultInstance.SignIn().ContinueWith(OnAssignData, TaskScheduler.Default);
+        yield return new WaitForEndOfFrame();  // Wait until the frame is fully rendered
+        if (panel != null) panel.SetActive(true);
+        if (openpanel != null) openpanel.SetActive(true);
+        if (GuestBtn != null) GuestBtn.SetActive(false);
+    }
+
+    private IEnumerator HidePanels()
+    {
+        yield return new WaitForEndOfFrame();  // Wait until the frame is fully rendered
+        if (panel != null) panel.SetActive(false);
+        if (openpanel != null) openpanel.SetActive(false);
+        if (GuestBtn != null) GuestBtn.SetActive(true);
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
@@ -166,29 +146,20 @@ public class GoogleLoginManager : MonoBehaviour
 
     public void LoadGoogleData()
     {
-        Debug.Log("Elan google login manager LoadGoogleData 11111===>");
         if (PlayerPrefs.HasKey(GoogleUserNameKey))
         {
-            Debug.Log("Elan google login manager LoadGoogleData 22222===>");
             string savedName = PlayerPrefs.GetString(GoogleUserNameKey);
             gname.text = savedName;
-            Debug.Log("Elan google login manager LoadGoogleData 33333===>"+ savedName);
         }
 
         if (PlayerPrefs.HasKey(GoogleUserDpKey))
         {
-            Debug.Log("Elan google login manager LoadGoogleData 4444===>");
             string savedProfilePicUrl = PlayerPrefs.GetString(GoogleUserDpKey);
             StartCoroutine(LoadProfilePic(savedProfilePicUrl));
-            Debug.Log("Elan google login manager LoadGoogleData 5555===>");
-        }
-        else
-        {
-            Debug.Log("No Google data found in PlayerPrefs.");
         }
     }
 
-    IEnumerator LoadProfilePic(string imageUrl)
+    private IEnumerator LoadProfilePic(string imageUrl)
     {
         UnityWebRequest www = UnityWebRequestTexture.GetTexture(imageUrl);
         yield return www.SendWebRequest();
