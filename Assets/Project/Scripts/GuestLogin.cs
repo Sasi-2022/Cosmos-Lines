@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using System.IO;
-
+using UnityEngine.SceneManagement;
 
 public class GuestLogin : MonoBehaviour
 {
@@ -27,9 +27,13 @@ public class GuestLogin : MonoBehaviour
 
     private string localDataPath;
 
+    //private const string GuestUserNameKey = "FBUserName";
+    private const string GuestUserIdKey = "GuestUserId";
+    //private const string FBUserDpKey = "FBUserDp"; // Save the profile picture URL
+
     private void Awake()
     {
-        if (instance == null)
+        /*if (instance == null)
         {
             instance = this;
             DontDestroyOnLoad(this);
@@ -37,9 +41,29 @@ public class GuestLogin : MonoBehaviour
         else
         {
             Destroy(gameObject);
-        }
+        }*/
+        //GlobalManager.Instance.guestLogin = this;
+        //DontDestroyOnLoad(gameObject);
         localDataPath = Application.persistentDataPath + "/" + GuestDataFileName;
         LoadGuestData(); // Load data on startup if it exists
+    }
+
+    private void Start()
+    {
+        GlobalManager.Instance.InitializeGuestLogin();
+
+        guestlogin = PlayerPrefs.GetInt("guestloginbool", 0) == 1;
+        Debug.Log("Elan Guestlogin manager Start ==>" + guestlogin);
+        if (guestlogin)
+        {
+            Debug.Log("Elan Guestlogin manager Start 1111 ==>" + guestlogin);
+            LoadGuestData();
+            LoginPanel.SetActive(true);
+            guestNameImage.gameObject.SetActive(true);
+            hide.gameObject.SetActive(false);
+            guestlogin = true;
+        }
+        SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
     public void OnGuestLoginButtonClick()
@@ -69,14 +93,29 @@ public class GuestLogin : MonoBehaviour
         guestNameImage.gameObject.SetActive(true);
         hide.gameObject.SetActive(false);
         guestlogin = true;
+
+        PlayerPrefs.SetInt("guestloginbool", guestlogin ? 1 : 0);
+        PlayerPrefs.Save();
     }
 
     public void OnLogoutButtonClick()
     {
-        guestlogin = false;
-        LoginPanel.gameObject.SetActive(false);
-       // OpenLoginPanel.gameObject.SetActive(true);
         
+
+        // OpenLoginPanel.gameObject.SetActive(true);
+
+        PlayerPrefs.DeleteKey("guestloginbool");
+        PlayerPrefs.Save();
+
+        guestlogin = false;
+
+        ResetUserData();
+        Debug.Log("Guest data cleared");
+        
+
+        if (LoginPanel != null) LoginPanel.gameObject.SetActive(false);
+        if (hide != null) hide.gameObject.SetActive(true);
+        if (guestNameImage != null) guestNameImage.gameObject.SetActive(false);
 
         // Clear guest data by deleting the JSON file
         if (File.Exists(localDataPath))
@@ -84,11 +123,26 @@ public class GuestLogin : MonoBehaviour
             File.Delete(localDataPath);
             Debug.Log("Guest data file deleted.");
         }
+        
+       
+    }
 
-        statusText.text = "Logged out.";
-        Debug.Log("Guest data cleared");
-        hide.gameObject.SetActive(true);
-        guestNameImage.gameObject.SetActive(false);
+    private void ResetUserData()
+    {
+        if (statusText != null)
+        {
+            statusText.text = "New Text";
+        }
+        else
+        {
+            Debug.LogError("FB_userName is null before resetting!");
+        }
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        Debug.Log("Scene loaded: " + scene.name);
+        ResetUserData();  // Clear UI components if logged out
     }
 
     public void SaveGameProgress(int progress)
@@ -155,5 +209,10 @@ public class GuestLogin : MonoBehaviour
         {
             Debug.Log("No guest data found. Please log in as a guest.");
         }
+    }
+
+    private void OnDestroy()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 }

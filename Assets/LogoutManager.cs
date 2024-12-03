@@ -8,25 +8,40 @@ public class LogoutManager : MonoBehaviour
 {
     public Button logoutBtn;
     public Button playBtn;
+    public GameObject panel;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        /*if(GoogleLoginManager.instance.googleLoginbool == true || FaceBookLogin.instance.FBLoginbool == true || GuestLogin.instance.guestlogin == true)
+        {
+             panel.gameObject.SetActive(true);
+        }*/
+      Debug.Log("Elan LogoutManager ===> " + GlobalManager.Instance.faceBookLogin);
+       //Debug.Log("Elan LogoutManager11111 ===> " + FaceBookLogin.instance.FBLoginbool);
+
+        if (GlobalManager.Instance.faceBookLogin != null)
+        {
+            Debug.Log("Elan LogoutManager 1111===> " + GlobalManager.Instance.faceBookLogin);
+           // FaceBookLogin.instance.LoadFacebookData();
+        }
+
     }
     public void LogOutButtonClk()
     {
-        if (GoogleLoginManager.instance.googleLoginbool == true)
+        Debug.Log("Elan comes Logoutmanager");
+        Debug.Log("ELan Logoutmanager ===>" + GlobalManager.Instance.faceBookLogin);
+        if (GlobalManager.Instance.googleLoginManager.googleLoginbool == true)
         {
-            GoogleLoginManager.instance.OnSignOut();
+            GlobalManager.Instance.googleLoginManager.OnSignOut();
         }
-        else if (FaceBookLogin.instance.FBLoginbool == true)
+        else if (GlobalManager.Instance.faceBookLogin.FBLoginbool == true)
         {
-            FaceBookLogin.instance.LogOut();
+            GlobalManager.Instance.faceBookLogin.LogOut();
         }
-        else if (GuestLogin.instance.guestlogin == true);
+        else if (GlobalManager.Instance.guestLogin.guestlogin == true)
         {
-            GuestLogin.instance.OnLogoutButtonClick();
+            GlobalManager.Instance.guestLogin.OnLogoutButtonClick();
         }
     }
 

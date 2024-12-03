@@ -6,29 +6,42 @@ using TMPro;
 using Facebook.Unity;
 using System;
 using UnityEngine.Networking; // For fetching the profile picture from URL
+using UnityEngine.SceneManagement;
 
-public class FaceBookLogin : MonoBehaviour
+public class FaceBookLoginManager : MonoBehaviour
 {
     public TextMeshProUGUI FB_userName;
-    public TextMeshProUGUI FB_userId;
+    //public TextMeshProUGUI FB_userId;
     public Image FB_userDp;
     public GameObject panel;
+    public GameObject openpanel;
     public bool FBLoginbool = false;
-    public static FaceBookLogin instance;
+    public static FaceBookLoginManager instance;
     public GameObject GuestBtn;
     public GameObject logintext;
 
+    private const string FBUserNameKey = "FBUserName";
+    private const string FBUserIdKey = "FBUserId";
+    private const string FBUserDpKey = "FBUserDp"; // Save the profile picture URL
+
     private void Awake()
     {
-        if (instance == null)
+        Debug.Log("Elan FB manager Awake ==>" + GlobalManager.Instance);
+        /*if (instance == null)
         {
             instance = this;
-            DontDestroyOnLoad(this);
+            GlobalManager.Instance.faceBookLogin = this;
+            DontDestroyOnLoad(gameObject);
         }
-        else
+        else if (instance != this)
         {
-            Destroy(gameObject);
-        }
+            Destroy(gameObject); // Destroy duplicate instance
+        }*/
+
+    }
+
+    private void Start()
+    {
         if (!FB.IsInitialized)
         {
             FB.Init(InitCallback);
@@ -37,6 +50,24 @@ public class FaceBookLogin : MonoBehaviour
         {
             FB.ActivateApp();
         }
+        GlobalManager.Instance.InitializeFacebookLogin();
+
+        FBLoginbool = PlayerPrefs.GetInt("FBLoginbool", 0) == 1;
+        Debug.Log("Elan FB manager Start 11111==>"+ FBLoginbool);
+        if (FBLoginbool)
+        {
+            Debug.Log("Elan FB manager Start 22222==>" + FBLoginbool);
+            LoadFacebookData();
+            panel.gameObject.SetActive(true);
+            openpanel.gameObject.SetActive(true);
+            GuestBtn.gameObject.SetActive(false);
+        }
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnDestroy()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
     private void InitCallback()
@@ -68,19 +99,56 @@ public class FaceBookLogin : MonoBehaviour
         if (FB.IsLoggedIn)
         {
             FB.LogOut();
-            panel.gameObject.SetActive(false);
-            ResetUserData();
         }
         else
         {
             Debug.Log("Not logged in to Facebook");
         }
+
+        //FB.LogOut();
+
+        // Clear Facebook-specific PlayerPrefs
+        PlayerPrefs.DeleteKey(FBUserNameKey);
+        PlayerPrefs.DeleteKey(FBUserIdKey);
+        PlayerPrefs.DeleteKey(FBUserDpKey);
+        PlayerPrefs.DeleteKey("FBLoginbool");
+        PlayerPrefs.Save();
+
+        FBLoginbool = false;
+        ResetUserData();
+        if (panel != null) panel.SetActive(false);
+        if (openpanel != null) openpanel.SetActive(false);
+        if (GuestBtn != null) GuestBtn.SetActive(true);
     }
     private void ResetUserData()
     {
-        FB_userName.text = "New Text";
-        FB_userId.text = "New Text";
-        FB_userDp.sprite = null;
+        if (FB_userName != null)
+        {
+            FB_userName.text = "New Text";
+        }
+        else
+        {
+            Debug.LogError("FB_userName is null before resetting!");
+        }
+
+        if (FB_userDp != null)
+        {
+            FB_userDp.sprite = null;
+        }
+        else
+        {
+            Debug.LogError("FB_userDp is null before resetting!");
+        }
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        Debug.Log("Scene loaded: " + scene.name);
+        // Ensure user data is cleared when transitioning between scenes
+        if (!FB.IsLoggedIn)
+        {
+            ResetUserData();  // Clear UI components if logged out
+        }
     }
 
     private void LoginCallback(ILoginResult result)
@@ -100,7 +168,10 @@ public class FaceBookLogin : MonoBehaviour
             // Retrieve user data
             FB.API("/me?fields=id,first_name,last_name,email", HttpMethod.GET, UserDataCallback);
             FBLoginbool = true;
+            PlayerPrefs.SetInt("FBLoginbool", FBLoginbool ? 1 : 0);
+            PlayerPrefs.Save();
             panel.gameObject.SetActive(true);
+            openpanel.gameObject.SetActive(true);
             GuestBtn.gameObject.SetActive(false);
         }
     }
@@ -117,7 +188,16 @@ public class FaceBookLogin : MonoBehaviour
             string userId = userData["id"].ToString();
             string firstName = userData["first_name"].ToString();
             FB_userName.text = firstName;
-            FB_userId.text = userId;
+            //FB_userId.text = userId;
+
+
+            // Save user data in PlayerPrefs
+            PlayerPrefs.SetString(FBUserNameKey, firstName);
+            PlayerPrefs.SetString(FBUserIdKey, userId);
+            PlayerPrefs.Save();
+
+
+
             FB.API("/me/picture?redirect=false&type=large", HttpMethod.GET, ProfilePictureCallback);
         }
     }
@@ -133,6 +213,10 @@ public class FaceBookLogin : MonoBehaviour
             string pictureURL = pictureData["url"].ToString();
 
             Debug.Log("Profile Picture URL: " + pictureURL);
+
+            PlayerPrefs.SetString(FBUserDpKey, pictureURL);
+            PlayerPrefs.Save();
+
             StartCoroutine(FetchProfilePicture(pictureURL));
         }
     }
@@ -150,6 +234,29 @@ public class FaceBookLogin : MonoBehaviour
         else
         {
             Debug.Log("Error fetching profile picture: " + www.error);
+        }
+    }
+
+    public void LoadFacebookData()
+    {
+        Debug.Log("Elan FB manager LoadFacebookData ==>");
+        // Load Facebook data from PlayerPrefs
+        if (PlayerPrefs.HasKey(FBUserNameKey) && PlayerPrefs.HasKey(FBUserIdKey) && PlayerPrefs.HasKey(FBUserDpKey))
+        {
+            Debug.Log("Elan FB manager LoadFacebookData 1111 ==>");
+            string savedName = PlayerPrefs.GetString(FBUserNameKey);
+            string savedUserId = PlayerPrefs.GetString(FBUserIdKey);
+            string savedProfilePicUrl = PlayerPrefs.GetString(FBUserDpKey);
+
+            FB_userName.text = savedName;
+           // FB_userId.text = savedUserId;
+
+            // Fetch and display the profile picture
+            StartCoroutine(FetchProfilePicture(savedProfilePicUrl));
+        }
+        else
+        {
+            Debug.Log("No Facebook data found in PlayerPrefs.");
         }
     }
 }

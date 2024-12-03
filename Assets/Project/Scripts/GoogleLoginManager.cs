@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
-
 using System.Threading.Tasks;
 using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
@@ -12,15 +11,14 @@ using Google;
 public class GoogleLoginManager : MonoBehaviour
 {
     public string imageURL;
-    // public TextMeshProUGUI userNameTxt, userEmailTxt;
     public string userNameStr;
     public Sprite _profilePic;
     public string Name;
     public bool googleLoginbool = false;
-
-    // public GameObject loginPanel, profilePanel;
     private GoogleSignInConfiguration configuration;
+   // private string webClientId = "YOUR_WEB_CLIENT_ID";  // Replace with your actual Web Client ID
     private string webClientId = "1051490529515-k6q6bgda78o0q34au9an9crb5bum7kc8.apps.googleusercontent.com";
+
     public static GoogleLoginManager instance;
     public TextMeshProUGUI gname;
     public TextMeshProUGUI id;
@@ -29,19 +27,17 @@ public class GoogleLoginManager : MonoBehaviour
     public GameObject GuestBtn;
     public GameObject openpanel;
 
+    private const string GoogleUserNameKey = "GoogleUserNameKey";
+    private const string GoogleUserIdKey = "GoogleUserIdKey";
+    private const string GoogleUserDpKey = "GoogleUserDpKey";
 
     void Awake()
     {
-        if (instance == null)
-        {
-            instance = this;
-            DontDestroyOnLoad(this);
-        }
-        else
-        {
-            //instance = null;
-            Destroy(gameObject);
-        }
+        Debug.Log("Elan google login manager Awake");
+        // Debug.Log("GoogleLoginManager Awake==>" + GlobalManager.Instance); 
+        // GlobalManager.Instance.googleLoginManager = this;
+        // Don't destroy game object in Awake if you don't need this across scenes
+        // DontDestroyOnLoad(gameObject);
 
         configuration = new GoogleSignInConfiguration
         {
@@ -50,119 +46,165 @@ public class GoogleLoginManager : MonoBehaviour
             RequestEmail = true,
             RequestAuthCode = true
         };
-
-    }
-
-    private void OnEnable()
-    {
-        
-
     }
 
     private void Start()
     {
+        Debug.Log("Elan google login manager Start");
 
+        //GlobalManager.Instance.InitializeGoogleLogin();
+        googleLoginbool = PlayerPrefs.GetInt("googleLoginbool", 0) == 1;
+        Debug.Log("Elan google login manager Star===>"+ googleLoginbool);
+        if (googleLoginbool)
+        {
+            Debug.Log("Elan google login manager Star 11111===>" + googleLoginbool);
+            LoadGoogleData();
+            if (panel != null) panel.SetActive(true);
+            if (openpanel != null) openpanel.SetActive(true);
+            if (GuestBtn != null) GuestBtn.SetActive(false);
+            Debug.Log("Elan google login manager Star 222222===>" + googleLoginbool);
+        }
+
+        SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
+    private void OnDestroy()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
 
     public void OnSignIn()
     {
         GoogleSignIn.Configuration = configuration;
-        Debug.LogError("Calling SignIn");
-     
         GoogleSignIn.DefaultInstance.SignIn().ContinueWith(OnAuthenticationFinished);
-        StartCoroutine(OpenPanel());
-
+       // StartCoroutine(OpenPanel());
     }
 
     internal void OnAuthenticationFinished(Task<GoogleSignInUser> task)
     {
+        Debug.Log("Elan google login manager OnAuthenticationFinished===>");
         if (task.IsFaulted)
         {
-            using (IEnumerator<System.Exception> enumerator =
-                task.Exception.InnerExceptions.GetEnumerator())
+            Debug.Log("Elan google login manager OnAuthenticationFinished 11111===>");
+            Debug.LogError("Google SignIn failed.");
+            foreach (var exception in task.Exception.InnerExceptions)
             {
-                if (enumerator.MoveNext())
-                {
-                    GoogleSignIn.SignInException error =
-                        (GoogleSignIn.SignInException)enumerator.Current;
-                    Debug.LogError("Got Error: " + error.Status + " " + error.Message);
-                }
-                else
-                {
-                    Debug.LogError("Got unexpected exception?!?" + task.Exception);
-                }
+                var error = (GoogleSignIn.SignInException)exception;
+                Debug.LogError("Error: " + error.Status + " " + error.Message);
             }
         }
         else if (task.IsCanceled)
         {
-            Debug.LogError("Cancelled");
+            Debug.Log("Elan google login manager OnAuthenticationFinished 22222===>");
+            Debug.LogError("Google SignIn was canceled.");
         }
         else
         {
-            userNameStr = "" + task.Result.DisplayName;
+            Debug.Log("Elan google login manager OnAuthenticationFinished 333333===>");
+            userNameStr = task.Result.DisplayName;
             gname.text = userNameStr;
-            Debug.LogError("Welcome: " + task.Result.DisplayName + "!");
             id.text = task.Result.IdToken;
-            imageURL = task.Result.ImageUrl?.ToString();
-            StartCoroutine(LoadProfilePic(task.Result.ImageUrl.ToString()));
+            Debug.Log("Elan google login manager OnAuthenticationFinished 444444===>");
             googleLoginbool = true;
-
-          
-            PlayerPrefs.SetString("DisplayName", task.Result.DisplayName);
-            PlayerPrefs.SetString("LoadProfilePic", imageURL);
+            PlayerPrefs.SetInt("googleLoginbool", googleLoginbool ? 1 : 0);
+            PlayerPrefs.SetString(GoogleUserNameKey, task.Result.DisplayName);
+            PlayerPrefs.SetString(GoogleUserIdKey, task.Result.IdToken);
             PlayerPrefs.Save();
-
-            panel.gameObject.SetActive(true);
-            openpanel.gameObject.SetActive(true);
-            GuestBtn.gameObject.SetActive(false);
-            
+            Debug.Log("Elan google login manager OnAuthenticationFinished 55555===>");
+            if (panel != null) panel.SetActive(true);
+            Debug.Log("Elan google login manager OnAuthenticationFinished 55555 aaaaaa===>");
+            if (openpanel != null) openpanel.SetActive(true);
+            Debug.Log("Elan google login manager OnAuthenticationFinished 55555 bbbbbb===>");
+            if (GuestBtn != null) GuestBtn.SetActive(false);
+            Debug.Log("Elan google login manager OnAuthenticationFinished 66666===>");
         }
     }
 
-
-    IEnumerator LoadProfilePic(string imageUrl)
-    {
-        WWW www = new WWW(imageUrl);
-        yield return www;
-
-        _profilePic = Sprite.Create(www.texture, new Rect(0, 0, www.texture.width, www.texture.height), new Vector2(0, 0));
-        Google_userDp.sprite = _profilePic;
-
-    }
     internal void OnAssignData(Task<GoogleSignInUser> task)
     {
-        userNameStr = "" + task.Result.DisplayName;
+        userNameStr = task.Result.DisplayName;
         gname.text = userNameStr;
         id.text = task.Result.IdToken;
     }
 
-
     public void OnSignOut()
     {
-        if (userNameStr != null) userNameStr = "";
-        //userEmailTxt.text = "";
-
-        if (imageURL != null) imageURL = "";
-        Debug.Log("Calling SignOut");
-        // PlayerPrefs.Save();
+        Debug.Log("Elan google login manager OnSignOut 11111===>");
+        PlayerPrefs.DeleteKey(GoogleUserNameKey);
+        PlayerPrefs.DeleteKey(GoogleUserIdKey);
+        PlayerPrefs.DeleteKey(GoogleUserDpKey);
+        PlayerPrefs.DeleteKey("googleLoginbool");
+        PlayerPrefs.Save();
+        Debug.Log("Elan google login manager OnSignOut 22222===>");
         GoogleSignIn.DefaultInstance.SignOut();
-        SceneManager.LoadScene("LoginScene");
         googleLoginbool = false;
+        ResetUserData();
+        Debug.Log("Elan google login manager OnSignOut 33333===>");
+        if (panel != null) panel.SetActive(false);
+        if (openpanel != null) openpanel.SetActive(false);
+        if (GuestBtn != null) GuestBtn.SetActive(true);
+        Debug.Log("Elan google login manager OnSignOut 44444===>");
     }
+
+    private void ResetUserData()
+    {
+        if (gname != null) gname.text = "New Text";
+        else Debug.LogError("gname is null before resetting!");
+    }
+
     IEnumerator OpenPanel()
     {
         yield return new WaitForSeconds(0.3f);
         panel.gameObject.SetActive(true);
-        GoogleSignIn.DefaultInstance.SignIn().ContinueWith(
-            OnAssignData, TaskScheduler.Default);
-
+        //GoogleSignIn.DefaultInstance.SignIn().ContinueWith(OnAssignData, TaskScheduler.Default);
     }
 
-    public void destroy()
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        GoogleSignIn.DefaultInstance.SignOut();
-        if (this.gameObject != null)
-            DestroyImmediate(this.gameObject);
+        ResetUserData();
+    }
+
+    public void LoadGoogleData()
+    {
+        Debug.Log("Elan google login manager LoadGoogleData 11111===>");
+        if (PlayerPrefs.HasKey(GoogleUserNameKey))
+        {
+            Debug.Log("Elan google login manager LoadGoogleData 22222===>");
+            string savedName = PlayerPrefs.GetString(GoogleUserNameKey);
+            gname.text = savedName;
+            Debug.Log("Elan google login manager LoadGoogleData 33333===>"+ savedName);
+        }
+
+        if (PlayerPrefs.HasKey(GoogleUserDpKey))
+        {
+            Debug.Log("Elan google login manager LoadGoogleData 4444===>");
+            string savedProfilePicUrl = PlayerPrefs.GetString(GoogleUserDpKey);
+            StartCoroutine(LoadProfilePic(savedProfilePicUrl));
+            Debug.Log("Elan google login manager LoadGoogleData 5555===>");
+        }
+        else
+        {
+            Debug.Log("No Google data found in PlayerPrefs.");
+        }
+    }
+
+    IEnumerator LoadProfilePic(string imageUrl)
+    {
+        UnityWebRequest www = UnityWebRequestTexture.GetTexture(imageUrl);
+        yield return www.SendWebRequest();
+
+        if (www.result == UnityWebRequest.Result.Success)
+        {
+            Texture2D texture = ((DownloadHandlerTexture)www.downloadHandler).texture;
+            _profilePic = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0, 0));
+            Google_userDp.sprite = _profilePic;
+
+            PlayerPrefs.SetString(GoogleUserDpKey, imageUrl);
+            PlayerPrefs.Save();
+        }
+        else
+        {
+            Debug.LogError("Failed to load profile picture: " + www.error);
+        }
     }
 }
