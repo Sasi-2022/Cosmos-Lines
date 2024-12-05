@@ -11,6 +11,8 @@ using UnityEngine.SceneManagement;
 public class FaceBookLoginManager : MonoBehaviour
 {
     public TextMeshProUGUI FB_userName;
+    public Image Google_userDp;
+    public Image defaultAvatar;
     //public TextMeshProUGUI FB_userId;
     public Image FB_userDp;
     public GameObject panel;
@@ -116,29 +118,13 @@ public class FaceBookLoginManager : MonoBehaviour
 
         FBLoginbool = false;
         ResetUserData();
-        if (panel != null) panel.SetActive(false);
-        if (openpanel != null) openpanel.SetActive(false);
-        if (GuestBtn != null) GuestBtn.SetActive(true);
+        StartCoroutine(ShowPanels(false));
+       //GuestBtn.SetActive(true);
     }
     private void ResetUserData()
     {
-        if (FB_userName != null)
-        {
-            FB_userName.text = "New Text";
-        }
-        else
-        {
-            Debug.LogError("FB_userName is null before resetting!");
-        }
-
-        if (FB_userDp != null)
-        {
-            FB_userDp.sprite = null;
-        }
-        else
-        {
-            Debug.LogError("FB_userDp is null before resetting!");
-        }
+        FB_userName.text = "New User";
+        FB_userDp.sprite = null;
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
@@ -170,9 +156,8 @@ public class FaceBookLoginManager : MonoBehaviour
             FBLoginbool = true;
             PlayerPrefs.SetInt("FBLoginbool", FBLoginbool ? 1 : 0);
             PlayerPrefs.Save();
-            panel.gameObject.SetActive(true);
-            openpanel.gameObject.SetActive(true);
-            GuestBtn.gameObject.SetActive(false);
+            StartCoroutine(ShowPanels(true));
+            GuestBtn.SetActive(false);
         }
     }
 
@@ -257,6 +242,26 @@ public class FaceBookLoginManager : MonoBehaviour
         else
         {
             Debug.Log("No Facebook data found in PlayerPrefs.");
+        }
+    }
+
+    private IEnumerator ShowPanels(bool show)
+    {
+        if (show)
+        {
+            yield return new WaitForSeconds(0.5f); // Optional delay for smooth transitions
+            panel.SetActive(true);
+            openpanel.SetActive(true);
+            //Google_userDp.enabled = false;
+           defaultAvatar.enabled = false;
+        }
+        else
+        {
+            yield return new WaitForSeconds(0.5f); // Optional delay for smooth transitions
+            panel.SetActive(false);
+            openpanel.SetActive(false);
+            //Google_userDp.enabled = false;
+            defaultAvatar.enabled = false;
         }
     }
 }

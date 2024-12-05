@@ -15,7 +15,7 @@ public class GoogleLoginManager : MonoBehaviour
     public Sprite _profilePic;
     public string Name;
     public bool googleLoginbool = false;
-    public GameObject defaultAvatar;
+    public Image defaultAvatar;
     private GoogleSignInConfiguration configuration;
     private string webClientId = "1051490529515-k6q6bgda78o0q34au9an9crb5bum7kc8.apps.googleusercontent.com";
 
@@ -46,12 +46,13 @@ public class GoogleLoginManager : MonoBehaviour
 
     private void Start()
     {
-        Debug.Log("Google login manager Start");
+        Debug.Log("Elan Google login manager Start");
 
         GlobalManager.Instance.InitializeGoogleLogin();
         googleLoginbool = PlayerPrefs.GetInt("googleLoginbool", 0) == 1;
         if (googleLoginbool)
         {
+            Debug.Log("Elan Google login manager Start 11111");
             LoadGoogleData();
             StartCoroutine(ShowPanels());
         }
@@ -95,11 +96,16 @@ public class GoogleLoginManager : MonoBehaviour
             PlayerPrefs.SetInt("googleLoginbool", googleLoginbool ? 1 : 0);
             PlayerPrefs.SetString(GoogleUserNameKey, task.Result.DisplayName);
             PlayerPrefs.SetString(GoogleUserIdKey, task.Result.IdToken);
+
+            string profilePicUrl = task.Result.ImageUrl != null ? task.Result.ImageUrl.ToString() : null;
+            Debug.Log("Elan Google login manager OnAuthenticationFinished====>"+ profilePicUrl);
+            if (profilePicUrl != null)
+            {
+                PlayerPrefs.SetString(GoogleUserDpKey, profilePicUrl);
+            }
             PlayerPrefs.Save();
 
-            StartCoroutine(ShowPanels());
-            if (defaultAvatar != null)
-                defaultAvatar.SetActive(task.Result.ImageUrl == null);
+            StartCoroutine(ShowPanels(profilePicUrl));
         }
     }
 
@@ -123,12 +129,24 @@ public class GoogleLoginManager : MonoBehaviour
         if (gname != null) gname.text = "New Text";
     }
 
-    private IEnumerator ShowPanels()
+    private IEnumerator ShowPanels(string profilePicUrl = null)
     {
+        Debug.Log("Elan Google login manager ShowPanels====>" + profilePicUrl);
         yield return new WaitForEndOfFrame();  // Wait until the frame is fully rendered
         if (panel != null) panel.SetActive(true);
         if (openpanel != null) openpanel.SetActive(true);
         if (GuestBtn != null) GuestBtn.SetActive(false);
+        //defaultAvatar.enabled = true;
+        //defaultAvatar.gameObject.SetActive(true);
+
+        if (defaultAvatar != null)
+        {
+            bool shouldShowDefaultAvatar = string.IsNullOrEmpty(profilePicUrl);
+            Debug.Log("Elan Google login manager ShowPanels DefaultAvatar====>" + shouldShowDefaultAvatar);
+            defaultAvatar.enabled = shouldShowDefaultAvatar;
+            Google_userDp.enabled = !shouldShowDefaultAvatar;
+
+        }
     }
 
     private IEnumerator HidePanels()
@@ -146,6 +164,9 @@ public class GoogleLoginManager : MonoBehaviour
 
     public void LoadGoogleData()
     {
+        Debug.Log("Elan Google login manager LoadGoogleData 11111====>");
+        string savedProfilePicUrl = null;
+
         if (PlayerPrefs.HasKey(GoogleUserNameKey))
         {
             string savedName = PlayerPrefs.GetString(GoogleUserNameKey);
@@ -154,7 +175,14 @@ public class GoogleLoginManager : MonoBehaviour
 
         if (PlayerPrefs.HasKey(GoogleUserDpKey))
         {
-            string savedProfilePicUrl = PlayerPrefs.GetString(GoogleUserDpKey);
+            Debug.Log("Elan Google login manager LoadGoogleData 2222====>");
+            savedProfilePicUrl = PlayerPrefs.GetString(GoogleUserDpKey);
+        }
+        Debug.Log("Elan Google login manager LoadGoogleData 3333====>"+ savedProfilePicUrl);
+        StartCoroutine(ShowPanels(savedProfilePicUrl));
+
+        if (!string.IsNullOrEmpty(savedProfilePicUrl))
+        {
             StartCoroutine(LoadProfilePic(savedProfilePicUrl));
         }
     }

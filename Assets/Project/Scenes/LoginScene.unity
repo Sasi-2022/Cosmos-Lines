@@ -243,7 +243,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -106}
+  m_AnchoredPosition: {x: 0, y: -106.00006}
   m_SizeDelta: {x: 195.70001, y: 181.09998}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!1001 &523021615
@@ -309,6 +309,10 @@ PrefabInstance:
     - target: {fileID: 1394357506309151014, guid: 917995d4fabb0c54a9dc0e7a18f1803e, type: 3}
       propertyPath: m_fontSizeBase
       value: 22
+      objectReference: {fileID: 0}
+    - target: {fileID: 1616832758389523958, guid: 917995d4fabb0c54a9dc0e7a18f1803e, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1911361524866227189, guid: 917995d4fabb0c54a9dc0e7a18f1803e, type: 3}
       propertyPath: m_IsActive
@@ -582,7 +586,7 @@ PrefabInstance:
     m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 4713357650028693363, guid: 917995d4fabb0c54a9dc0e7a18f1803e, type: 3}
-      insertIndex: 2
+      insertIndex: -1
       addedObject: {fileID: 502226981}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 917995d4fabb0c54a9dc0e7a18f1803e, type: 3}
@@ -631,6 +635,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   FB_userName: {fileID: 489127039}
+  Google_userDp: {fileID: 970552333}
+  defaultAvatar: {fileID: 502226979}
   FB_userDp: {fileID: 395701587}
   panel: {fileID: 423044616}
   openpanel: {fileID: 2098409329}
@@ -983,7 +989,7 @@ MonoBehaviour:
   _profilePic: {fileID: 0}
   Name: 
   googleLoginbool: 0
-  defaultAvatar: {fileID: 502226978}
+  defaultAvatar: {fileID: 502226979}
   gname: {fileID: 489127039}
   id: {fileID: 1942286530}
   Google_userDp: {fileID: 970552333}
